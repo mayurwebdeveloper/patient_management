@@ -15,6 +15,9 @@ use App\Http\Controllers\SliderController;
 use App\Http\Controllers\SpecialityController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\PatientController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +87,14 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
         Route::post('/',[DoctorController::class,'store'])->name('doctor-save')->middleware('permission:add doctor');
         Route::get('/delete/{id}',[DoctorController::class,'destroy'])->name('doctor-delete')->middleware('permission:delete doctor');
         Route::get('/edit/{id?}', [DoctorController::class, 'show'])->name('doctor-edit')->middleware('permission:edit doctor');
+    });
+
+    Route::prefix('/patients')->middleware('permission:view patients')->group(function () {
+        Route::get('/',[PatientController::class,'index'])->name('patients');
+        Route::post('/deleteSelected',[PatientController::class,'deleteSelected'])->name('patient.deleteSelected')->middleware('permission:delete patient');
+        Route::post('/',[PatientController::class,'store'])->name('patient-save')->middleware('permission:add patient');
+        Route::get('/delete/{id}',[PatientController::class,'destroy'])->name('patient-delete')->middleware('permission:delete patient');
+        Route::get('/edit/{id?}', [PatientController::class, 'show'])->name('patient-edit')->middleware('permission:edit patient');
     });
 
     // permissions

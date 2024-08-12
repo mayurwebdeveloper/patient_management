@@ -85,6 +85,9 @@
                         @can('view doctors')
                         <a class="collapse-item" href="{{ route('doctors') }}">Doctors</a>
                         @endcan
+                        @can('view patients')
+                        <a class="collapse-item" href="{{ route('patients') }}">Patients</a>
+                        @endcan
                     </div>
                 </div>
             </li>
