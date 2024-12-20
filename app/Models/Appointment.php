@@ -18,6 +18,14 @@ class Appointment extends Model
         'title',
         'description',
         'status',
+        'patient_name',
+        'age',
+        'age_month',
+        'mobile_number',
+        'sex',
+        'village',
+        'taluka',
+        'opd_date'
     ];
 
     protected $casts = [

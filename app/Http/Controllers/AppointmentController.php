@@ -2,10 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
+use App\Models\City;
+use App\Models\District;
+use App\Models\Hospital;
+use App\Models\HospitalWorkingHour;
+use App\Models\State;
+use DataTables;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+
+
+
+
+
 class AppointmentController extends Controller
 {
     /**
@@ -60,6 +75,12 @@ class AppointmentController extends Controller
      */
     public function create()
     {
+        $sectors = Helper::getSectors();
+        $types = Helper::getTypes();
+        $specialities = Helper::getSpecialities();
+        $states = State::all(); 
+        $data = compact('specialities','sectors','types','states');
+        return view('appointment.create')->with($data);
         //
     }
 

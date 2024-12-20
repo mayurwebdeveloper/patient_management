@@ -14,7 +14,14 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3" id="table-card-title">
         <h6 class="m-0 font-weight-bold text-primary">Appointments</h6>
-        
+        <div>
+            @can('add appointment')
+            <a class="btn btn-info" href="{{ route('add-appointment-form') }}"><i class="fas fa-plus"></i></a>
+            @endcan
+            @can('delete appointment')
+            <button id="delete-selected" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+            @endcan
+        </div>
     </div>
     <div class="card-body">
         <div class="table-responsive">

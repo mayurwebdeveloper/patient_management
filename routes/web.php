@@ -65,6 +65,12 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
     // ->name('prescription')->middleware('permission:view prescription');
 
     Route::get('/appointments', [AppointmentController::class, 'index'])->name('doctor.appointments')->middleware('permission:view appointment');
+
+    Route::get('/add-appointment-form', [AppointmentController::class, 'create'])->name('add-appointment-form')->middleware('permission:add appointment');
+
+    Route::post('/store',[AppointmentController::class,'store'])->name('add-appointment')->middleware('permission:add appointment');
+       
+
     Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
 
     // dashboard routes
