@@ -1,0 +1,1 @@
+[04-Sep-2024 18:12:16 UTC] PHP Fatal error:  Cannot use App\Models\User as User because the name is already in use in /home/noj859s0d5wv/public_html/testingpq.xyz/app/Http/Controllers/Api/AppointmentController.php on line 10

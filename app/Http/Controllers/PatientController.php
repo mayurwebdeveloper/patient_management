@@ -16,6 +16,7 @@ class PatientController extends Controller
     {
         $roles = Role::get();
         if ($request->ajax()) {
+            // $this->request('');
             $data = User::whereHas('roles', function($q) {
                 $q->where('id', 3); // Filter users with role ID 3 (Patient)
             })->orderBy('id', 'desc')->get();

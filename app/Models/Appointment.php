@@ -10,13 +10,20 @@ class Appointment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'patient_id',
-        'doctor_id',
         'hospital_id',
-        'speciality_id',
-        'appointment_date',
-        'status'
+        'speciality_id', // Use speciality_id for department_id
+        'doctor_id',
+        'date',
+        'time_slot',
+        'title',
+        'description',
+        'status',
     ];
+
+    protected $casts = [
+        'appointment_date' => 'datetime',
+    ];
+    
 
     public function patient()
     {

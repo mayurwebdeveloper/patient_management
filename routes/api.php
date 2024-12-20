@@ -8,8 +8,14 @@ use App\Http\Controllers\Api\PmJayController;
 use App\Http\Controllers\Api\SliderController;
 use App\Http\Controllers\Api\SpecialityController;
 use App\Http\Controllers\Api\WorkPlaceController;
-use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AppointmentController;
+
+use App\Http\Controllers\Api\UserProfileController;
+use App\Http\Controllers\Api\PasswordResetController;
+
+
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,10 +37,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::middleware('auth:sanctum')->group(function(){
-    Route::post('/appointments',[AppointmentController::class, 'store']);
+    Route::post('/appointments',[AppointmentController::class, 'store']); 
+    Route::get('/appointments',[AppointmentController::class, 'list']);
     Route::put('/appointments/{id}',[AppointmentController::class, 'update']);
-});
 
+    Route::get('/prescriptions', [AppointmentController::class, 'appointmentWisePrescriptions']);
+
+
+    
+});
+Route::get('/hospitallist',[AppointmentController::class, 'hospitallist']);
+Route::get('/speciality',[AppointmentController::class,'speciality']);
+Route::get('/doctorslist',[AppointmentController::class,'doctorslist']);
 
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -76,3 +90,14 @@ Route::get('/work-place-types',[WorkPlaceController::class,'index']);
 // front side counts apis
 Route::get('/front-counts',[FrontSettingController::class,'index']);
 
+
+Route::middleware('auth:sanctum')->group(function () {
+    // User Profile Management
+    Route::get('/user/profile', [UserProfileController::class, 'show']);
+    Route::put('/user/profile', [UserProfileController::class, 'update']);
+    Route::delete('/user/profile', [UserProfileController::class, 'destroy']);
+});
+
+// Password Reset
+Route::post('/password/email', [PasswordResetController::class, 'sendResetLinkEmail']);
+Route::post('/password/reset', [PasswordResetController::class, 'reset']);

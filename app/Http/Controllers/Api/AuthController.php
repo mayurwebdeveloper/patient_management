@@ -12,19 +12,52 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-        ]);
+        try {
+            // Validate the incoming request
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string',
+                'mobile_no' => 'required|string',
+                'fcm_token' => 'required|string'
+            ]);
+    
+            // Create a new user
+            $user = User::create([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['password']),
+                'mobile_no' => $validatedData['mobile_no']
+            ]);
+    
+            // Check if the user was created successfully
+            if ($user) {
+                $user->assignRole('Patient'); // Or use Role::findById(3)->name if needed
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        return response()->json(['message' => 'User registered successfully'], 201);
+                return response()->json([
+                    'status' => true,
+                    'message' => 'User registered successfully',
+                    'user_details' => [
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'mobile_no' => $user->mobile_no,
+                        'fcm_token' => $validatedData['fcm_token'],
+                        'role' => '3'
+                    ]
+                ], 201);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Something went wrong!'
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            // Handle any unexpected exceptions
+            return response()->json([
+                'status' => false,
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function login(Request $request)
@@ -44,7 +77,15 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);
+        return response()->json(['status'=>true,'access_token' => $token, 'token_type' => 'Bearer','user_details'=>[
+            'name' => $user->name,
+            'email' => $user->email,
+            'mobile_no'=>$user->mobile_no,
+            'fcm_token'=>'',
+            'role'=>$user->roles->pluck('id')[0],
+            'user_id'=>$user->id,
+            'token' => $token
+        ]]);
     }
 
     public function logout(Request $request)

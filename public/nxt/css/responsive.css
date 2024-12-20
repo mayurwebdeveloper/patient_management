@@ -1,0 +1,207 @@
+
+@media screen and (min-width: 992px) {
+    .nav-btn {
+        display: none;
+    }
+}
+@media screen and (max-width: 1200px) {
+    .right-header nav ul li a {
+        padding: 0 20px 4px;
+    }
+    .right-header nav ul li {
+        font-size: 16px;
+    }
+    .food-order-block .item-info .btn {
+        font-size: 18px;
+    }
+    .food-order-block .item-info h3 {
+        font-size: 28px;
+    }
+    .food-order-block .item-info .price {
+        font-size: 24px;
+    }
+    .experiance-list .item .title {
+        font-size: 20px;
+    }
+    .button-left .primaryBtn {
+        min-width: 120px;
+        font-size: 14px;
+    }
+    .toggleInfo {
+        width: 30px;
+        height: 30px;
+    }
+    .toggleInfo svg {
+        width: 24px;
+        height: 24px;
+    }
+    .actions a {
+        font-size: 14px;
+    }
+    .booking-bar {
+        display: block;
+    }
+    .booking-bar ul {
+        padding-left: 0;
+    }
+}
+@media screen and (max-width: 991px) {
+    .nav-btn {
+        border: 0;
+        background: transparent;
+    }
+    .nav-btn span {
+        display: block;
+        width: 35px;
+        height: 3px;
+        background: #b60c04;
+        margin: 5px 0;
+        position: relative;
+        transition: all linear 0.2s;
+    }
+    .open-menu .nav-btn {
+        margin-bottom: 2px;
+    }
+    .open-menu .nav-btn span:nth-child(2) {
+        display: none;
+    }
+    .open-menu .nav-btn span:first-child {
+        transform: rotate(45deg);
+        top: 4px;
+    }
+    .open-menu .nav-btn span:last-child {
+        transform: rotate(-45deg);
+        top: -4px;
+    }
+     .right-header nav {
+        position: fixed;
+        width: 100%;
+        max-width: 300px;
+        background: #fff;
+        left: -100%;
+        top: 0;
+        height: 100vh;
+        z-index: 9;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        padding: 40px 20px;
+        transition: all linear 0.4s;
+        overflow-y: auto;
+     }
+     .right-header.open-menu nav {
+        left: 0;
+     }
+     .right-header nav ul {
+        display: block;
+    }
+    .right-header nav ul li a {
+        padding: 0;
+    }
+    .right-header nav ul li {
+        font-size: 20px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #b60c04;
+        padding-bottom: 15px;
+    }
+     .header-main .logo img {
+        max-width: 120px;
+    }
+    .right-header nav ul:after {
+        display: none;
+    }
+    .right-header {
+        display: grid;
+        row-gap: 10px;
+    }
+    .nav-btn {
+        margin-left: auto;
+        cursor: pointer;
+    }
+    .social-icon ul {
+        gap: 5px;
+        max-width: 110px;
+    }
+    .social-icon ul li a {
+        padding: 2px;
+    }
+    .user-links ul li a {
+        font-size: 12px;
+        padding: 5px 8px;
+    }
+
+    .booking-bar ul {
+        padding-left: 0;
+        grid-template-columns: repeat(3, auto);
+        row-gap: 10px;
+    } 
+}
+@media screen and (max-width: 767px) {
+    .header-main .logo img {
+        max-width: 90px;
+    }
+    .banner-caption {
+        grid-template-columns: 1fr;
+        padding: 0 50px;
+    }
+    .right-banner {
+        padding: 20px 10px;
+    }
+    .right-banner h2 {
+        font-size: 22px;
+    }
+    .movie-list-section {
+        margin-bottom: 50px;
+    }
+    .section-title {
+        padding: 12px 50px;
+        background-size: 52px auto;
+        font-size: 28px;
+        margin: 0 0 15px 0;
+    }
+    .section-title .title {
+        font-size: 26px;
+    }
+    .food-order-block {
+        grid-template-columns: 1fr;
+     row-gap: 20px;
+    }
+    .experiance-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .food-order-block .item-block {
+        grid-template-columns: 1fr;
+    }
+    .food-order-block .item-block .img-block {
+        margin-bottom: 20px;
+    }
+    .food-order-block .item-info h3 {
+        padding-left: 0;
+    }
+    .food-order-block .item-info .price {
+        padding-left: 0;
+        padding-bottom: 20px;
+    }
+    .movie-list {
+        margin: 0 0 50px 0;
+        padding: 40px 0 0 0;
+    }
+    .site-footer {
+        padding: 20px 20px 30px 20px;
+    }
+    .footer-left {
+        margin-bottom: 20px;
+    }
+    .site-footer > div:not(.copy-right) {
+        grid-template-columns: 1fr;
+    }
+    .footer-left ul {
+        padding-left: 0;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .booking-bar ul {
+        padding-left: 0;
+        grid-template-columns: repeat(1, auto);
+        row-gap: 10px;
+    } 
+}

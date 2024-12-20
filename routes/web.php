@@ -16,6 +16,9 @@ use App\Http\Controllers\SpecialityController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\PrescriptionController;
+
 
 
 
@@ -47,8 +50,22 @@ Auth::routes([
     'verify' => false, // Email Verification Routes...
   ]);
 
+//   Route::middleware(['auth', 'role:doctor'])->group(function () {
+    
+// });
+
 
 Route::prefix('/admin')->middleware(['auth'])->group(function () {
+    
+    Route::resource('prescriptions', PrescriptionController::class);
+    Route::get('/prescription/{id}/pdf', [PrescriptionController::class, 'generatePDF'])->name('prescription.pdf');
+
+    // Route::delete('/prescriptions/{id}', [PrescriptionController::class, 'destroy'])->name('prescriptions.destroy');
+
+    // ->name('prescription')->middleware('permission:view prescription');
+
+    Route::get('/appointments', [AppointmentController::class, 'index'])->name('doctor.appointments')->middleware('permission:view appointment');
+    Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
 
     // dashboard routes
     Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
