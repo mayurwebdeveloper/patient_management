@@ -18,6 +18,7 @@ class Appointment extends Model
         'title',
         'description',
         'status',
+        'opd_number',
         'patient_name',
         'age',
         'age_month',
@@ -25,7 +26,8 @@ class Appointment extends Model
         'sex',
         'village',
         'taluka',
-        'opd_date'
+        'opd_date',
+        'provisional'
     ];
 
     protected $casts = [

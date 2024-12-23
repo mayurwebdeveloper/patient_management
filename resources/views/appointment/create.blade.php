@@ -14,6 +14,20 @@
         <h6 class="m-0 font-weight-bold text-primary">Add Appointment</h6>
     </div>
     <div class="card-body">
+
+
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+              <button class="nav-link active" id="nav-home-tab" data-coreui-toggle="tab" data-coreui-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Home</button>
+              <button class="nav-link" id="nav-profile-tab" data-coreui-toggle="tab" data-coreui-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</button>
+              <button class="nav-link" id="nav-contact-tab" data-coreui-toggle="tab" data-coreui-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button>
+            </div>
+          </nav>
+
+          <div class="tab-content" id="nav-tabContent">
+
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                
         <form method="post" action="{{ route('add-appointment') }}" enctype="multipart/form-data">
             @csrf
             <div class="form-row">
@@ -68,7 +82,7 @@
 
             <div class="form-group col-md-3">
                 <label for="taluka">Taluka</label>
-                <input type="text" class="form-control @error('taluka') is-invalid @enderror" name="taluka" id="taluka" value="{{old('taluka')}}" placeholder="Age Month">
+                <input type="text" class="form-control @error('taluka') is-invalid @enderror" name="taluka" id="taluka" value="{{old('taluka')}}" placeholder="Taluka">
                 @error('taluka')
                 <div class="invalid-feedback">
                 {{$message}}
@@ -85,9 +99,9 @@
                 @enderror
             </div>
             <div class="form-group col-md-3">
-                <label for="mobile">Mobile</label>
-                <input type="text" class="form-control @error('mobile') is-invalid @enderror" name="mobile" id="mobile" value="{{old('mobile')}}" placeholder="Mobile">
-                @error('mobile')
+                <label for="mobile_number">Mobile</label>
+                <input type="text" class="form-control @error('mobile_number') is-invalid @enderror" name="mobile_number" id="mobile_number" value="{{old('mobile_number')}}" placeholder="Mobile">
+                @error('mobile_number')
                 <div class="invalid-feedback">
                 {{$message}}
                 </div>
@@ -95,9 +109,9 @@
             </div>
 
             <div class="form-group col-md-3">
-                <label for="date">date</label>
-                <input type="date" class="form-control @error('date') is-invalid @enderror" name="date" id="date" value="{{old('date')}}" placeholder="Date">
-                @error('date')
+                <label for="opd_date">OPD date</label>
+                <input type="date" class="form-control @error('opd_date') is-invalid @enderror" name="opd_date" id="opd_date" value="{{old('opd_date')}}" placeholder="OPD Date">
+                @error('opd_date')
                 <div class="invalid-feedback">
                 {{$message}}
                 </div>
@@ -105,59 +119,13 @@
             </div>
 
 
-                <div class="form-group col-md-6">
-                    <label for="speciality_type">Speciality Type.</label>
-                    <select class="form-control @error('speciality_type') is-invalid @enderror" name="speciality_type" id="speciality_type" placeholder="Speciality Type">
-                        <option value="1" @if(old('speciality_type') == 1) selected @endif>Single</option>
-                        <option value="2" @if(old('speciality_type') == 2) selected @endif>Multi Speciality</option>
-                    </select>
-                </div>
-
-                
-
-
-            </div>
-
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="type">Type.</label>
-                    <select class="form-control @error('type') is-invalid @enderror" name="type" id="type" value="{{old('type')}}" placeholder="Type">
-                        <option value="">Select</option>
-                        @foreach ($types as $type)
-                            <option value="{{ $type }}" {{ old('type') == $type ? 'selected' : '' }}>{{ $type }}</option>
-                        @endforeach
-                    </select>
-                    @error('type')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-
+               
 
                 <div class="form-group col-md-6">
-                    <label for="sector">Sector.</label>
-                    <select class="form-control @error('sector') is-invalid @enderror" name="sector" id="sector" value="{{old('sector')}}" placeholder="Sector">
-                        <option value="">Select</option>
-                        @foreach ($sectors as $sector)
-                            <option value="{{ $sector }}" {{ old('sector') == $sector ? 'selected' : '' }}>{{ $sector }}</option>
-                        @endforeach
-                    </select>
-                    @error('sector')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-            </div>
-
-
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label for="specialities">Specialities.</label>
-                    <select multiple required class="form-control @error('specialities') is-invalid @enderror" name="specialities[]" id="specialities" placeholder="Specialities">
-                        @foreach ($specialities as $speciality)
-                            <option value="{{ $speciality }}" {{ in_array($speciality, old('specialities', [])) ? 'selected' : '' }}>{{ $speciality }}</option>
+                    <label for="speciality_id">Specialities.</label>
+                    <select  required class="form-control @error('speciality_id') is-invalid @enderror" name="speciality_id" id="speciality_id" placeholder="speciality_id">
+                        @foreach ($specialities as $key => $speciality)
+                            <option value="{{ $key }}" {{ in_array($key, old('specialities', [])) ? 'selected' : '' }}>{{ $speciality }}</option>
                         @endforeach
                     </select>
                     @error('specialities')
@@ -166,127 +134,35 @@
                         </div>
                     @enderror
                 </div>
-            </div>
-
-
-            <div class="form-row">
 
                 <div class="form-group col-md-6">
-                    <label for="mo">Phone no.</label>
-                    <input type="text" class="form-control @error('mo') is-invalid @enderror" name="mo" id="mo" value="{{old('mo')}}" placeholder="Phone no">
-                    @error('mo')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="email">Email</label>
-                    <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" id="email" value="{{old('email')}}" placeholder="Email">
-                    @error('email')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-
-            </div>
-
-
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label for="description">Description</label>
-                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"  placeholder="Description">{{old('description')}}</textarea>
-                    @error('description')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-            </div>
-
-
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="state">State.</label>
-                    <select class="form-control @error('state') is-invalid @enderror" name="state" id="state" placeholder="state">
-                        <option value="">Select</option>
-                        @foreach ($states as $state)
-                            <option value="{{ $state->state_id }}" {{ old('state','12') == $state->state_id ? 'selected' : '' }}>{{ $state->state_title }}</option>
+                    <label for="hospital_id">Hospital</label>
+                    <select  required class="form-control @error('hospital_id') is-invalid @enderror" name="hospital_id" id="hospital_id" placeholder="hospital_id">
+                        @foreach ($hospitals as $key => $hospital_id)
+                            <option value="{{ $key }}" {{ in_array($key, old('hospitals', [])) ? 'selected' : '' }}>{{ $hospital_id }}</option>
                         @endforeach
                     </select>
-                    @error('state')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
+                    @error('hospital_id')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
                     @enderror
                 </div>
-                <div class="form-group col-md-4">
-                    <label for="district">District.</label>
-                    <select class="form-control @error('district') is-invalid @enderror" name="district" id="district" placeholder="district">
-                    </select>
-                    @error('district')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="city">Sub division.</label>
-                    <select class="form-control @error('city') is-invalid @enderror" name="city" id="city" placeholder="Sub division">
-                    </select>
-                    @error('city')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-            </div>
 
-
-            <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label for="address">Address</label>
-                    <textarea name="address" id="" class="form-control @error('address') is-invalid @enderror" rows="4" placeholder="Address">{{old('address')}}</textarea>
-                    @error('address')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
             </div>
 
             <div class="form-row">
-                <div class="form-group col-md-12">
-                    <label for="location">Location Link.</label>
-                    <input type="text" class="form-control @error('location') is-invalid @enderror" name="location" id="location" value="{{old('location')}}" placeholder="Location Link">
-                    @error('location')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-            </div>
-
-
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="image">Image</label>
-                    <input type="file" class="form-control" name="image" id="image" placeholder="Image">
-                </div>
-
-                <div class="form-group col-md-4">
-                    <label for="brochure">Brochure</label>
-                    <input type="file" class="form-control" name="brochure" id="brochure" placeholder="Brochure">
-                </div>    
                 
-                <div class="form-group col-md-4">
-                    <label for="status">Status.</label>
-                    <select class="form-control @error('status') is-invalid @enderror" name="status" id="status" value="{{old('status')}}" placeholder="Status">
-                        <option value="1">Enable</option>
-                        <option value="0">Disable</option>
+
+                <div class="form-group col-md-6">
+                    <label for="sector">Doctor</label>
+                    <select class="form-control @error('doctor_id') is-invalid @enderror" name="doctor_id" id="doctor_id" value="{{old('doctor_id')}}" placeholder="Doctor">
+                        <option value="">Select</option>
+                        @foreach ($doctors as $key=> $doctor)
+                            <option value="{{ $key }}" {{ old('doctor_id') == $doctor ? 'selected' : '' }}>{{ $doctor }}</option>
+                        @endforeach
                     </select>
-                    @error('status')
+                    @error('doctor_id')
                     <div class="invalid-feedback">
                     {{$message}}
                     </div>
@@ -294,33 +170,138 @@
                 </div>
             </div>
 
+            <div class="form-group col-md-3">
+                <label for="provisional">Provisional</label>
+                <input type="text" name="provisional" id="provisional" class="form-control" value="{{ old('provisional') }}">
+                @error('provisional')
+                <div class="invalid-feedback">
+                {{$message}}
+                </div>
+                @enderror
+            </div>
+            
             <div class="form-row">
-
-                <div class="form-group col-md-4">
-                    <label for="is_pmjay">PMJAY-MA.</label>
-                    <select class="form-control @error('is_pmjay') is-invalid @enderror" name="is_pmjay" id="is_pmjay" placeholder="PMJAY-MA">
-                        <option value="0" @if(old('is_pmjay') == 0) selected @endif>No</option>
-                        <option value="1" @if(old('is_pmjay') == 1) selected @endif>Yes</option>
-                    </select>
-                </div>
-
-            </div>
-
-            <div class="form-row" id="pmjay_description">
-                <div class="form-group col-md-12">
-                    <label for="pmjay_description">PmJay Description</label>
-                    <textarea name="pmjay_description" id="pmjay_description_box" class="form-control @error('pmjay_description') is-invalid @enderror" rows="4" >{{old('pmjay_description')}}</textarea>
-                    @error('pmjay_description')
+                <div class="form-group col-md-3">
+                    <label for="weight">Weight (KG)</label>
+                    <input type="text" name="weight" id="weight" class="form-control" value="{{ old('weight') }}">
+                    @error('weight')
                     <div class="invalid-feedback">
                     {{$message}}
                     </div>
                     @enderror
                 </div>
+
+                <div class="form-group col-md-3">
+                    <label for="height">Height (CM)</label>
+                    <input type="text" name="height" id="height" class="form-control" value="{{ old('height') }}">
+                    @error('height')
+                    <div class="invalid-feedback">
+                    {{$message}}
+                    </div>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="temprature">Temprature (CM)</label>
+                    <input type="text" name="temprature" id="temprature" class="form-control" value="{{ old('temprature') }}">
+                    @error('temprature')
+                    <div class="invalid-feedback">
+                    {{$message}}
+                    </div>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="pulse">Pulse (/Min)</label>
+                    <input type="text" name="pulse" id="pulse" class="form-control" value="{{ old('pulse') }}">
+                    @error('pulse')
+                    <div class="invalid-feedback">
+                    {{$message}}
+                    </div>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="bp">BP (mm OR Hg)</label>
+                    <input type="text" name="bp" id="bp" class="form-control" value="{{ old('bp') }}">
+                    @error('bp')
+                    <div class="invalid-feedback">
+                    {{$message}}
+                    </div>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="spo2">SPO2</label>
+                    <input type="text" name="spo2" id="spo2" class="form-control" value="{{ old('spo2') }}">
+                    @error('spo2')
+                    <div class="invalid-feedback">
+                    {{$message}}
+                    </div>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="rr">RR</label>
+                    <input type="text" name="rr" id="rr" class="form-control" value="{{ old('rr') }}">
+                    @error('rr')
+                    <div class="invalid-feedback">
+                    {{$message}}
+                    </div>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="paller">Paller</label>
+                    <input type="text" name="paller" id="paller" class="form-control" value="{{ old('paller') }}">
+                    @error('paller')
+                    <div class="invalid-feedback">
+                    {{$message}}
+                    </div>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="clubbing">Clubbing</label>
+                    <input type="text" name="clubbing" id="clubbing" class="form-control" value="{{ old('clubbing') }}">
+                    @error('clubbing')
+                    <div class="invalid-feedback">
+                    {{$message}}
+                    </div>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="cyanosis">Cyanosis</label>
+                    <input type="text" name="cyanosis" id="cyanosis" class="form-control" value="{{ old('cyanosis') }}">
+                    @error('cyanosis')
+                    <div class="invalid-feedback">
+                    {{$message}}
+                    </div>
+                    @enderror
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="oedema">Oedema</label>
+                    <input type="text" name="oedema" id="oedema" class="form-control" value="{{ old('oedema') }}">
+                    @error('oedema')
+                    <div class="invalid-feedback">
+                    {{$message}}
+                    </div>
+                    @enderror
+                </div>
+
+
             </div>
 
             <button type="submit" class="btn btn-primary">save</button>
         </form>
 
+            </div>
+            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">...</div>
+            <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">...</div>
+          </div>
+          
     </div>
 </div>
 

@@ -41,7 +41,7 @@
                 @foreach($appointments as $appointment)
                     <tr>
                         <td>{{ $appointment->id }}</td>
-                        <td>{{ $appointment->patient->name }}</td>
+                        <td>{{ $appointment->patient_name }}</td>
                         <td>{{ $appointment->hospital->name }}</td>
                         <td>{{ $appointment->speciality->title }}</td>
                         <td>{{ $appointment->appointment_date ? $appointment->appointment_date->format('d-m-Y H:i') : 'No Date Available' }}</td>

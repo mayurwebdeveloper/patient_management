@@ -6,6 +6,8 @@ use App\Models\Notification;
 use App\Models\Setting;
 use App\Models\Speciality;
 use App\Models\WorkPlace;
+use App\Models\Hospital;
+use App\Models\User;
 
 class Helper {
 
@@ -125,6 +127,34 @@ class Helper {
         }
 
         return $specialities;
+    }
+
+    public static function getSpecialitiesIds() {
+
+        $results = Speciality::where('status', 1)->get();
+        $specialities = [];
+
+        foreach ($results as $result) {
+            $specialities[$result->id] = $result->title; 
+        }
+
+        return $specialities;
+    }
+
+    public static function getHospital(){
+        $results = Hospital::where('status',1)->get();
+        foreach ($results as $result) {
+            $hospital[$result->id] = $result->name; 
+        }
+        return $hospital;
+    }
+
+    public static function getDoctor(){
+        $results = User::role('Doctor')->where('status',1)->get();
+        foreach ($results as $result) {
+            $doctor[$result->id] = $result->name; 
+        }
+        return $doctor;
     }
 
 }
