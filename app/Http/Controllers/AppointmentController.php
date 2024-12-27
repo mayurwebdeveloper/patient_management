@@ -235,6 +235,10 @@ class AppointmentController extends Controller
 
         // $validatedData['appointment_date'] = CarbonDate::createFromFormat('Y-m-d', $request->opd_date)->format('Y-m-d');
 
+        // echo "<pre>";
+        // print_r($validatedData);
+        // exit;
+        
         // Find and update the appointment
         $appointment = Appointment::findOrFail($id);
         $appointment->update($validatedData);

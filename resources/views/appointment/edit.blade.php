@@ -108,7 +108,7 @@
 
             <div class="form-group col-md-3">
                 <label for="opd_date">OPD date</label>
-                <input type="date" class="form-control @error('opd_date') is-invalid @enderror" name="opd_date" id="opd_date" value="{{old('opd_date')}}" placeholder="OPD Date">
+                <input type="date" class="form-control @error('opd_date') is-invalid @enderror" name="opd_date" id="opd_date" value="{{ $appointment->opd_date }}" placeholder="OPD Date">
                 @error('opd_date')
                 <div class="invalid-feedback">
                 {{$message}}
@@ -117,26 +117,8 @@
             </div>
 
 
-               
 
-                <div class="form-group col-md-6">
-                    <label for="opd_date">OPD Date</label>
-                    <input type="date" name="opd_date" id="opd_date" class="form-control" value="{{ $appointment->opd_date }}">
-                </div>
-
-                <div class="form-group col-md-6">
-                    <label for="hospital_id">Hospital</label>
-                    <select  required class="form-control @error('hospital_id') is-invalid @enderror" name="hospital_id" id="hospital_id" placeholder="hospital_id">
-                        @foreach ($hospitals as $key => $hospital_id)
-                            <option value="{{ $key }}" {{ in_array($key, old('hospitals', [])) ? 'selected' : '' }}>{{ $hospital_id }}</option>
-                        @endforeach
-                    </select>
-                    @error('hospital_id')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
+            
 
             </div>
 
@@ -149,7 +131,7 @@
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="provisional">Provisional</label>
-                    <input type="text" name="provisional" id="provisional" class="form-control" value="{{ old('provisional') }}">
+                    <input type="text" name="provisional" id="provisional" class="form-control" value="{{ $appointment->provisional }}">
                     @error('provisional')
                     <div class="invalid-feedback">
                     {{$message}}
@@ -159,7 +141,7 @@
                 
                 <div class="form-group col-md-3">
                     <label for="weight">Weight (KG)</label>
-                    <input type="text" name="weight" id="weight" class="form-control" value="{{ old('weight') }}">
+                    <input type="text" name="weight" id="weight" class="form-control" value="{{ $appointment->weight }}">
                     @error('weight')
                     <div class="invalid-feedback">
                     {{$message}}
@@ -169,7 +151,7 @@
 
                 <div class="form-group col-md-3">
                     <label for="height">Height (CM)</label>
-                    <input type="text" name="height" id="height" class="form-control" value="{{ old('height') }}">
+                    <input type="text" name="height" id="height" class="form-control" value="{{ $appointment->height }}">
                     @error('height')
                     <div class="invalid-feedback">
                     {{$message}}
@@ -178,8 +160,8 @@
                 </div>
 
                 <div class="form-group col-md-3">
-                    <label for="temprature">Temprature (CM)</label>
-                    <input type="text" name="temprature" id="temprature" class="form-control" value="{{ old('temprature') }}">
+                    <label for="temperature">temperature (CM)</label>
+                    <input type="text" name="temperature" id="temperature" class="form-control" value="{{ $appointment->temperature }}">
                     @error('temprature')
                     <div class="invalid-feedback">
                     {{$message}}
@@ -189,7 +171,7 @@
 
                 <div class="form-group col-md-3">
                     <label for="pulse">Pulse (/Min)</label>
-                    <input type="text" name="pulse" id="pulse" class="form-control" value="{{ old('pulse') }}">
+                    <input type="text" name="pulse" id="pulse" class="form-control" value="{{ $appointment->pulse }}">
                     @error('pulse')
                     <div class="invalid-feedback">
                     {{$message}}
@@ -199,7 +181,7 @@
 
                 <div class="form-group col-md-3">
                     <label for="bp">BP (mm OR Hg)</label>
-                    <input type="text" name="bp" id="bp" class="form-control" value="{{ old('bp') }}">
+                    <input type="text" name="bp" id="bp" class="form-control" value="{{ $appointment->bp }}">
                     @error('bp')
                     <div class="invalid-feedback">
                     {{$message}}
@@ -209,7 +191,7 @@
 
                 <div class="form-group col-md-3">
                     <label for="spo2">SPO2</label>
-                    <input type="text" name="spo2" id="spo2" class="form-control" value="{{ old('spo2') }}">
+                    <input type="text" name="spo2" id="spo2" class="form-control" value="{{ $appointment->spo2 }}">
                     @error('spo2')
                     <div class="invalid-feedback">
                     {{$message}}
@@ -219,7 +201,7 @@
 
                 <div class="form-group col-md-3">
                     <label for="rr">RR</label>
-                    <input type="text" name="rr" id="rr" class="form-control" value="{{ old('rr') }}">
+                    <input type="text" name="rr" id="rr" class="form-control" value="{{ $appointment->rr }}">
                     @error('rr')
                     <div class="invalid-feedback">
                     {{$message}}
@@ -229,7 +211,7 @@
 
                 <div class="form-group col-md-3">
                     <label for="paller">Paller</label>
-                    <input type="text" name="paller" id="paller" class="form-control" value="{{ old('paller') }}">
+                    <input type="text" name="paller" id="paller" class="form-control" value="{{ $appointment->paller }}">
                     @error('paller')
                     <div class="invalid-feedback">
                     {{$message}}
@@ -239,7 +221,7 @@
 
                 <div class="form-group col-md-3">
                     <label for="clubbing">Clubbing</label>
-                    <input type="text" name="clubbing" id="clubbing" class="form-control" value="{{ old('clubbing') }}">
+                    <input type="text" name="clubbing" id="clubbing" class="form-control" value="{{ $appointment->clubbing }}">
                     @error('clubbing')
                     <div class="invalid-feedback">
                     {{$message}}
@@ -249,7 +231,7 @@
 
                 <div class="form-group col-md-3">
                     <label for="cyanosis">Cyanosis</label>
-                    <input type="text" name="cyanosis" id="cyanosis" class="form-control" value="{{ old('cyanosis') }}">
+                    <input type="text" name="cyanosis" id="cyanosis" class="form-control" value="{{ $appointment->cyanosis }}">
                     @error('cyanosis')
                     <div class="invalid-feedback">
                     {{$message}}
@@ -259,7 +241,7 @@
 
                 <div class="form-group col-md-3">
                     <label for="oedema">Oedema</label>
-                    <input type="text" name="oedema" id="oedema" class="form-control" value="{{ old('oedema') }}">
+                    <input type="text" name="oedema" id="oedema" class="form-control" value="{{ $appointment->oedema }}">
                     @error('oedema')
                     <div class="invalid-feedback">
                     {{$message}}
