@@ -27,7 +27,18 @@ class Appointment extends Model
         'village',
         'taluka',
         'opd_date',
-        'provisional'
+        'provisional',
+        'weight',
+        'height',
+        'temperature',
+        'bp',
+        'pulse',
+        'spo2',
+        'rr',
+        'paller',
+        'clubbing',
+        'cyanosis',
+        'oedema'
     ];
 
     protected $casts = [

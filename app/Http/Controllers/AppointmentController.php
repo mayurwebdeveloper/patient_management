@@ -141,18 +141,110 @@ class AppointmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    /**
+     * Show the form for editing an appointment.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
-        //
+        // $appointment = Appointment::findOrFail($id);
+
+        // Fetch related data for dropdowns and fields
+        $sectors = Helper::getSectors();
+        $types = Helper::getTypes();
+        $specialities = Helper::getSpecialitiesIds();
+        $states = State::all();
+        $hospitals = Helper::getHospital();
+        $doctors = Helper::getDoctor();
+        
+        $appointment = Appointment::with(['doctor', 'hospital'])->findOrFail($id);
+
+        $doctors = Helper::getDoctor(); // Fetch all doctors
+        $hospitals = Helper::getHospital(); // Fetch all hospitals
+        // echo "<pre>";
+        // print_r($specialities);
+        // echo "</pre>";
+    
+
+        $data = compact('appointment', 'specialities', 'sectors', 'types', 'states', 'hospitals', 'doctors');
+
+        return view('appointment.edit')->with($data);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified appointment in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        // Validate incoming request data
+        $validatedData = $request->validate([
+            'doctor_id' => 'required|integer',
+            'hospital_id' => 'required|integer',
+            'speciality_id' => 'required|integer',
+            'opd_number' => 'nullable|string|max:255',
+            'patient_name' => 'nullable|string|max:255',
+            'age' => 'nullable|string|max:10',
+            'age_month' => 'nullable|string|max:10',
+            'mobile_number' => 'nullable|string|max:15',
+            'sex' => 'nullable|string|max:15',
+            'village' => 'nullable|string|max:50',
+            'taluka' => 'nullable|string|max:50',
+            'opd_date' => 'nullable|date',
+        ]);
+
+        $validatedData['appointment_date'] = CarbonDate::createFromFormat('Y-m-d', $request->opd_date)->format('Y-m-d');
+
+        // Find and update the appointment
+        $appointment = Appointment::findOrFail($id);
+        $appointment->update($validatedData);
+
+        // Redirect back with a success message
+        return redirect()->route('appointments.index')->with('success', 'Appointment updated successfully.');
     }
+
+    /**
+     * Update the specified appointment in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function moupdate(Request $request, $id)
+    {
+        // Validate incoming request data
+        $validatedData = $request->validate([
+            'provisional' => 'nullable',
+            'weight' => 'nullable',
+            'height' => 'nullable',
+            'temperature' => 'nullable',
+            'bp' => 'nullable',
+            'pulse' => 'nullable',
+            'spo2' => 'nullable',
+            'rr' => 'nullable',
+            'paller' => 'nullable',
+            'clubbing' => 'nullable',
+            'cyanosis' => 'nullable',
+            'oedema' => 'nullable',
+        ]);
+
+        // $validatedData['appointment_date'] = CarbonDate::createFromFormat('Y-m-d', $request->opd_date)->format('Y-m-d');
+
+        // Find and update the appointment
+        $appointment = Appointment::findOrFail($id);
+        $appointment->update($validatedData);
+
+        // Redirect back with a success message
+        return redirect()->route('doctor.appointments')->with('success', 'Appointment updated successfully.');
+    }
+
+
+    
 
     /**
      * Remove the specified resource from storage.

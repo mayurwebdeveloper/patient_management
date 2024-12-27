@@ -69,10 +69,14 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
     Route::get('/add-appointment-form', [AppointmentController::class, 'create'])->name('add-appointment-form')->middleware('permission:add appointment');
 
     Route::post('/store',[AppointmentController::class,'store'])->name('add-appointment')->middleware('permission:add appointment');
+
+    Route::put('/appointments/moupdate/{id}', [AppointmentController::class, 'moupdate'])->name('appointments.moupdate');
        
 
     Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
-
+    Route::get('/appointments/{id}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit');
+    Route::put('/appointments/{id}', [AppointmentController::class, 'update'])->name('appointments.update');
+    
     // dashboard routes
     Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
 

@@ -71,6 +71,9 @@
                                 <input type="hidden" name="status" value="confirmed">
                                 <button type="submit" class="btn btn-success btn-sm">Confirm</button>
                             </form>
+
+                            <a href="{{ route('appointments.edit', $appointment->id) }}" class="btn btn-sm btn-primary">Edit</a>
+
                         </td>
 
                       

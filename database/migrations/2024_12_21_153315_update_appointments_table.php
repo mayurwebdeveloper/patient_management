@@ -14,15 +14,15 @@ class UpdateAppointmentsTable extends Migration
     public function up()
     {
         Schema::table('appointments', function (Blueprint $table) {
-            // $table->string('opd_number')->nullable()->after('updated_at');
-            // $table->string('patient_name')->nullable()->after('opd_number');
-            // $table->string('age', 10)->nullable()->after('patient_name');
-            // $table->string('age_month', 10)->nullable()->after('age');
-            // $table->string('mobile_number', 15)->nullable()->after('age_month');
-            // $table->string('sex', 15)->nullable()->after('mobile_number');
-            // $table->string('village', 50)->nullable()->after('sex');
-            // $table->string('taluka', 50)->nullable()->after('village');
-            // $table->date('opd_date')->nullable()->after('taluka');
+            $table->string('opd_number')->nullable()->after('updated_at');
+            $table->string('patient_name')->nullable()->after('opd_number');
+            $table->string('age', 10)->nullable()->after('patient_name');
+            $table->string('age_month', 10)->nullable()->after('age');
+            $table->string('mobile_number', 15)->nullable()->after('age_month');
+            $table->string('sex', 15)->nullable()->after('mobile_number');
+            $table->string('village', 50)->nullable()->after('sex');
+            $table->string('taluka', 50)->nullable()->after('village');
+            $table->date('opd_date')->nullable()->after('taluka');
         });
     }
 
