@@ -38,7 +38,29 @@ class Appointment extends Model
         'paller',
         'clubbing',
         'cyanosis',
-        'oedema'
+        'oedema',
+        'RS',
+        'CVS',
+        'CNS',
+        'PA',
+        'LMP',
+        'G',
+        'P',
+        'L',
+        'A',
+        'age_of_last_child',
+        'type_of_last_delivery',
+        'personal_ho',
+        'past_ho',
+        'chief_complaint',
+        'past_history',
+        'family_history',
+        'vitals_general_examination',
+        'personal_history',
+        'allergic_history',
+        'obstetric_history',
+        'treatment',
+        'remarks'
     ];
 
     protected $casts = [
