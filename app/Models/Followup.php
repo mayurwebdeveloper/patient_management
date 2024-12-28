@@ -10,7 +10,7 @@ class Followup extends Model
 {
     use HasFactory;
 
-    protected $table = 'followups'; // Make sure this is the name of your table
+    protected $table = 'followup'; // Make sure this is the name of your table
     protected $fillable = [
         'appointment_id',
         'patient_id',
@@ -66,8 +66,28 @@ class Followup extends Model
         'allergic_history',
         'obstetric_history',
         'treatment',
-        'remarks'
+        'remarks','scheduled'
     ];
 
     // Optionally, you can add relationships here if needed (e.g., appointment, patient, etc.)
+
+    public function patient()
+    {
+        return $this->belongsTo(User::class, 'patient_id');
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(User::class, 'doctor_id');
+    }
+
+    public function hospital()
+    {
+        return $this->belongsTo(Hospital::class, 'hospital_id');
+    }
+
+    public function speciality()
+    {
+        return $this->belongsTo(Speciality::class, 'speciality_id');
+    }
 }

@@ -58,6 +58,7 @@ class PermissionSeeder extends Seeder
 
         Permission::create(['name' => 'view front-setting']);
         Permission::create(['name' => 'edit front-setting']);
-
+        Permission::create(['name' => 'add followup']);
+        Permission::create(['name' => 'add appointment']);
     }
 }

@@ -69,6 +69,8 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
 
     Route::get('/add-appointment-form', [AppointmentController::class, 'create'])->name('add-appointment-form')->middleware('permission:add appointment');
 
+    Route::get('/appointments/followup/{appointment}', [FollowupController::class, 'index'])->name('appointment.followup')->middleware('permission:view followup');
+
     Route::get('/followup-form/{appointment}', [FollowupController::class, 'create'])->name('followup-form')->middleware('permission:add followup');
 
     Route::post('/followup-store',[FollowupController::class,'store'])->name('add-followup')->middleware('permission:add followup');

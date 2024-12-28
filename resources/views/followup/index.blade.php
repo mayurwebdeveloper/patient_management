@@ -2,7 +2,7 @@
 
 
 @push('title')
-<title>Appointments</title>
+<title>FollowUp Appointments</title>
 @endpush
 
 @section('main-section')
@@ -13,10 +13,10 @@
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
     <div class="card-header py-3" id="table-card-title">
-        <h6 class="m-0 font-weight-bold text-primary">Appointments</h6>
+        <h6 class="m-0 font-weight-bold text-primary">FollowUp Appointments</h6>
         <div>
-            @can('add appointment')
-            <a class="btn btn-info" href="{{ route('add-appointment-form') }}"><i class="fas fa-plus"></i></a>
+            @can('add followup')
+            <a class="btn btn-info" href="{{ route('followup-form', ['appointment' => $appointmentId]) }}"><i class="fas fa-plus"></i></a>
             @endcan
             @can('delete appointment')
             <button id="delete-selected" class="btn btn-danger"><i class="fas fa-trash"></i></button>
@@ -38,18 +38,18 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($appointments as $appointment)
+                @foreach($followup as $key=>$value)
                     <tr>
-                        <td>{{ $appointment->id }}</td>
-                        <td>{{ $appointment->patient_name }}</td>
-                        <td>{{ $appointment->hospital->name }}</td>
-                        <td>{{ $appointment->speciality->title }}</td>
-                        <td>{{ $appointment->appointment_date ? $appointment->appointment_date->format('d-m-Y H:i') : 'No Date Available' }}</td>
-                        <td>{{ ucfirst($appointment->status) }}</td>
+                        <td>{{ $value->id }}</td>
+                        <td>{{ $value->patient_name }}</td>
+                        <td>{{ $value->hospital->name }}</td>
+                        <td>{{ $value->speciality->title }}</td>
+                        <td>{{ $value->appointment_date ? $value->appointment_date : 'No Date Available' }}</td>
+                        <td>{{ ucfirst($value->status) }}</td>
                         <td>
                                                 
                             <!-- Cancel Button -->
-                            <form action="{{ route('appointments.update-status', ['appointment' => $appointment->id]) }}" method="POST" style="display:inline-block;">
+                            <form action="{{ route('appointments.update-status', ['appointment' => $value->id]) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="status" value="cancelled">
@@ -57,7 +57,7 @@
                             </form>
 
                             <!-- Schedule Button -->
-                            <form action="{{ route('appointments.update-status', ['appointment' => $appointment->id]) }}" method="POST" style="display:inline-block;">
+                            <form action="{{ route('appointments.update-status', ['appointment' => $value->id]) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="status" value="scheduled">
@@ -65,15 +65,15 @@
                             </form>
 
                             <!-- Confirmed Button -->
-                            <form action="{{ route('appointments.update-status', ['appointment' => $appointment->id]) }}" method="POST" style="display:inline-block;">
+                            <form action="{{ route('appointments.update-status', ['appointment' => $value->id]) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="status" value="confirmed">
                                 <button type="submit" class="btn btn-success btn-sm">Confirm</button>
                             </form>
 
-                            <a href="{{ route('appointments.edit', $appointment->id) }}" class="btn btn-sm btn-primary">Edit</a>
-                            <a href="{{ route('appointment.followup', ['appointment' => $appointment->id]) }}" class="btn btn-sm btn-primary">Followup</a>
+                            <a href="{{ route('appointments.edit', $value->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                            
 
                             
                         </td>

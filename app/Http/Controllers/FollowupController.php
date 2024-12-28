@@ -1,24 +1,85 @@
 <?php
 // app/Http/Controllers/FollowupController.php
 namespace App\Http\Controllers;
-
+use App\Helpers\Helper;
+use App\Models\City;
+use App\Models\District;
+use App\Models\Hospital;
+use App\Models\HospitalWorkingHour;
+use App\Models\Speciality;
+use App\Models\User;
+use App\Models\State;
 use App\Models\Followup;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class FollowupController extends Controller
 {
-    public function create($appointmentId)
-{
-    // Fetch the appointment details if needed
-    $appointment = Appointment::findOrFail($appointmentId);
+    public function index(Request $request)
+    {
+        
+        // Get the logged-in doctor's ID
+        $appointmentId = $request->appointment;
+        if (Auth::user()->hasRole('admin')) {
+            // Perform admin-specific logic
+            $followup = Followup::where('appointment_id',$appointmentId)->with([
+                'patient' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'doctor' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'hospital' => function ($query) {
+                    $query->select('id', 'name');
+                }
+            ])->orderBy('opd_date', 'asc')->get();
+        }else{
+            $doctorId = Auth::user()->id;
+            $followup = Followup::where('appointment',$appointmentId)->with([
+                'patient' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'doctor' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'hospital' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'speciality' => function ($query) {
+                    $query->select('id', 'title');
+                }
+            ])->where('doctor_id', $doctorId)->orderBy('opd_date', 'asc')->get();
+        }
 
-    // Pass appointment details to the view
-    return view('followup.create', compact('appointment'));
-}
+       
+        // Fetch appointments for the logged-in doctor
+     
+
+        // Return the view with the appointments data
+        return view('followup.index', compact('followup','appointmentId'));
+    }
+    public function create($appointmentId)
+    {
+        // Fetch the appointment details if needed
+        $appointment = Appointment::findOrFail($appointmentId);
+        // dd($appointment);
+        // Pass appointment details to the view
+        $sectors = Helper::getSectors();
+        $types = Helper::getTypes();
+        $specialities = Helper::getSpecialitiesIds();
+        $states = State::all();
+        $hospitals = Helper::getHospital(); 
+        $doctors = Helper::getDoctor(); 
+        return view('followup.create', compact('appointment','sectors','types','specialities','states','hospitals','doctors'));
+    }
 
 
     public function store(Request $request)
     {
+        // dd($request->all());
         // Validate the incoming request data
         $validatedData = $request->validate([
             'appointment_id' => 'required|integer',
@@ -50,10 +111,6 @@ class FollowupController extends Controller
             'bp' => 'nullable|string',
             'spo2' => 'nullable|string',
             'rr' => 'nullable|string',
-            'paller' => 'nullable|string',
-            'clubbing' => 'nullable|string',
-            'cyanosis' => 'nullable|string',
-            'oedema' => 'nullable|string',
             'RS' => 'nullable|string',
             'CVS' => 'nullable|string',
             'CNS' => 'nullable|string',
@@ -82,6 +139,6 @@ class FollowupController extends Controller
         Followup::create($validatedData);
 
         // Redirect with a success message
-        return redirect()->route('followup-form')->with('success', 'Follow-up added successfully.');
+        return redirect()->route('appointment.followup',$request->appointment_id)->with('success', 'Follow-up added successfully.');
     }
 }
