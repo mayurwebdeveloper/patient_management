@@ -18,6 +18,7 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\PrescriptionController;
+use App\Http\Controllers\FollowupController;
 
 
 
@@ -68,6 +69,11 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
 
     Route::get('/add-appointment-form', [AppointmentController::class, 'create'])->name('add-appointment-form')->middleware('permission:add appointment');
 
+    Route::get('/followup-form/{appointment}', [FollowupController::class, 'create'])->name('followup-form')->middleware('permission:add followup');
+
+    Route::post('/followup-store',[FollowupController::class,'store'])->name('add-followup')->middleware('permission:add followup');
+
+    
     Route::post('/store',[AppointmentController::class,'store'])->name('add-appointment')->middleware('permission:add appointment');
 
     Route::put('/appointments/moupdate/{id}', [AppointmentController::class, 'moupdate'])->name('appointments.moupdate');
