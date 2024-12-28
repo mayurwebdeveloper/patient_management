@@ -217,7 +217,6 @@ class AppointmentController extends Controller
      */
     public function moupdate(Request $request, $id)
     {
-        // Validate incoming request data
         $validatedData = $request->validate([
             'provisional' => 'nullable',
             'weight' => 'nullable',
@@ -231,18 +230,35 @@ class AppointmentController extends Controller
             'clubbing' => 'nullable',
             'cyanosis' => 'nullable',
             'oedema' => 'nullable',
+            'RS' => 'nullable',
+            'CVS' => 'nullable',
+            'CNS' => 'nullable',
+            'PA' => 'nullable',
+            'LMP' => 'nullable|date',
+            'G' => 'nullable',
+            'P' => 'nullable',
+            'L' => 'nullable',
+            'A' => 'nullable',
+            'age_of_last_child' => 'nullable',
+            'type_of_last_delivery' => 'nullable',
+            'personal_ho' => 'nullable',
+            'past_ho' => 'nullable',
+            'chief_complaint' => 'nullable',
+            'past_history' => 'nullable',
+            'family_history' => 'nullable',
+            'vitals_general_examination' => 'nullable',
+            'personal_history' => 'nullable',
+            'allergic_history' => 'nullable',
+            'obstetric_history' => 'nullable',
+            'treatment' => 'nullable',
+            'remarks' => 'nullable',
         ]);
-
-        // $validatedData['appointment_date'] = CarbonDate::createFromFormat('Y-m-d', $request->opd_date)->format('Y-m-d');
-
-        // echo "<pre>";
-        // print_r($validatedData);
-        // exit;
-        
+    
         // Find and update the appointment
         $appointment = Appointment::findOrFail($id);
         $appointment->update($validatedData);
-
+    
+    
         // Redirect back with a success message
         return redirect()->route('doctor.appointments')->with('success', 'Appointment updated successfully.');
     }
