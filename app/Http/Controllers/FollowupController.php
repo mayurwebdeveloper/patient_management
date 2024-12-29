@@ -64,7 +64,21 @@ class FollowupController extends Controller
     public function create($appointmentId)
     {
         // Fetch the appointment details if needed
-        $appointment = Appointment::findOrFail($appointmentId);
+        $appointment = Appointment::with([
+            'patient' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'doctor' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'hospital' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'speciality' =>function ($query){
+                $query->select('id', 'title');
+            }
+        ])->findOrFail($appointmentId);
+        
         // dd($appointment);
         // Pass appointment details to the view
         $sectors = Helper::getSectors();
@@ -83,25 +97,8 @@ class FollowupController extends Controller
         // Validate the incoming request data
         $validatedData = $request->validate([
             'appointment_id' => 'required|integer',
-            'patient_id' => 'required|integer',
-            'doctor_id' => 'required|integer',
-            'hospital_id' => 'required|integer',
-            'speciality_id' => 'required|integer',
-            'appointment_date' => 'required|date',
-            'date' => 'required|date',
-            'time_slot' => 'required|string',
-            'title' => 'required|string',
-            'description' => 'nullable|string',
-            'status' => 'required|string',
-            'scheduled' => 'nullable|string',
-            'patient_name' => 'required|string',
+            
             'opd_number' => 'required|string',
-            'age' => 'nullable|integer',
-            'age_month' => 'nullable|integer',
-            'mobile_number' => 'nullable|string',
-            'sex' => 'nullable|string',
-            'village' => 'nullable|string',
-            'taluka' => 'nullable|string',
             'opd_date' => 'nullable|date',
             'provisional' => 'nullable|string',
             'weight' => 'nullable|string',
