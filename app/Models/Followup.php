@@ -71,6 +71,11 @@ class Followup extends Model
 
     // Optionally, you can add relationships here if needed (e.g., appointment, patient, etc.)
 
+    public function appointment()
+    {
+        return $this->belongsTo(Appointment::class, 'appointment_id');
+    }
+
     public function patient()
     {
         return $this->belongsTo(User::class, 'patient_id');

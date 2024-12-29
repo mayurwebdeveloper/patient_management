@@ -30,6 +30,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Patient</th>
+                    <th>Doctor</th>
                     <th>Hospital</th>
                     <th>Speciality</th>
                     <th>Appointment Date</th>
@@ -41,9 +42,10 @@
                 @foreach($followup as $key=>$value)
                     <tr>
                         <td>{{ $value->id }}</td>
-                        <td>{{ $value->patient_name }}</td>
-                        <td>{{ $value->hospital->name }}</td>
-                        <td>{{ $value->speciality->title }}</td>
+                        <td>{{ $value->appointment->patient->name }}</td>
+                        <td>{{ $value->appointment->doctor->name }}</td>
+                        <td>{{ $value->appointment->hospital->name }}</td>
+                        <td>{{ $value->appointment->speciality->title }}</td>
                         <td>{{ $value->appointment_date ? $value->appointment_date : 'No Date Available' }}</td>
                         <td>{{ ucfirst($value->status) }}</td>
                         <td>
@@ -71,11 +73,8 @@
                                 <input type="hidden" name="status" value="confirmed">
                                 <button type="submit" class="btn btn-success btn-sm">Confirm</button>
                             </form>
-
-                            <a href="{{ route('appointments.edit', $value->id) }}" class="btn btn-sm btn-primary">Edit</a>
                             
-
-                            
+                            <a href="{{ route('followup.edit', $value->id) }}" class="btn btn-sm btn-primary">Edit</a>    
                         </td>
 
                       

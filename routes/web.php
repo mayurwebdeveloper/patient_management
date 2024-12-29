@@ -72,6 +72,8 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
     Route::get('/appointments/followup/{appointment}', [FollowupController::class, 'index'])->name('appointment.followup')->middleware('permission:view followup');
 
     Route::get('/followup-form/{appointment}', [FollowupController::class, 'create'])->name('followup-form')->middleware('permission:add followup');
+    Route::get('/appointments/followup/{id}/edit', [FollowupController::class, 'edit'])->name('followup.edit');
+    Route::put('/followup/{id}', [FollowupController::class, 'update'])->name('followup.update');
 
     Route::post('/followup-store',[FollowupController::class,'store'])->name('add-followup')->middleware('permission:add followup');
 
@@ -83,6 +85,7 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
 
     Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::get('/appointments/{id}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit');
+    
     Route::put('/appointments/{id}', [AppointmentController::class, 'update'])->name('appointments.update');
     
     // dashboard routes

@@ -26,39 +26,47 @@ class FollowupController extends Controller
         if (Auth::user()->hasRole('admin')) {
             // Perform admin-specific logic
             $followup = Followup::where('appointment_id',$appointmentId)->with([
-                'patient' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'doctor' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'hospital' => function ($query) {
-                    $query->select('id', 'name');
+                'appointment' => function ($query) {
+                    $query->select('id', 'patient_id', 'doctor_id', 'hospital_id','speciality_id')
+                        ->with([
+                            'patient' => function ($query) {
+                                $query->select('id', 'name');
+                            },
+                            'doctor' => function ($query) {
+                                $query->select('id', 'name');
+                            },
+                            'hospital' => function ($query) {
+                                $query->select('id', 'name');
+                            },
+                            'speciality' => function ($query) {
+                                $query->select('id', 'title');
+                            }
+                        ]);
                 }
             ])->orderBy('opd_date', 'asc')->get();
         }else{
             $doctorId = Auth::user()->id;
             $followup = Followup::where('appointment',$appointmentId)->with([
-                'patient' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'doctor' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'hospital' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'speciality' => function ($query) {
-                    $query->select('id', 'title');
+                'appointment' => function ($query) {
+                    $query->select('id', 'patient_id', 'doctor_id', 'hospital_id','speciality_id')
+                        ->with([
+                            'patient' => function ($query) {
+                                $query->select('id', 'name');
+                            },
+                            'doctor' => function ($query) {
+                                $query->select('id', 'name');
+                            },
+                            'hospital' => function ($query) {
+                                $query->select('id', 'name');
+                            },
+                            'speciality' => function ($query) {
+                                $query->select('id', 'title');
+                            }
+                        ]);
                 }
             ])->where('doctor_id', $doctorId)->orderBy('opd_date', 'asc')->get();
         }
 
-       
-        // Fetch appointments for the logged-in doctor
-     
-
-        // Return the view with the appointments data
         return view('followup.index', compact('followup','appointmentId'));
     }
     public function create($appointmentId)
