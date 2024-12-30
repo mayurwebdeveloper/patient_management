@@ -39,47 +39,27 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($followup as $key=>$value)
+                @if($followup->isEmpty())
                     <tr>
-                        <td>{{ $value->id }}</td>
-                        <td>{{ $value->appointment->patient->name }}</td>
-                        <td>{{ $value->appointment->doctor->name }}</td>
-                        <td>{{ $value->appointment->hospital->name }}</td>
-                        <td>{{ $value->appointment->speciality->title }}</td>
-                        <td>{{ $value->appointment_date ? $value->appointment_date : 'No Date Available' }}</td>
-                        <td>{{ ucfirst($value->status) }}</td>
-                        <td>
-                                                
-                            <!-- Cancel Button -->
-                            <form action="{{ route('appointments.update-status', ['appointment' => $value->id]) }}" method="POST" style="display:inline-block;">
-                                @csrf
-                                @method('PATCH')
-                                <input type="hidden" name="status" value="cancelled">
-                                <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
-                            </form>
-
-                            <!-- Schedule Button -->
-                            <form action="{{ route('appointments.update-status', ['appointment' => $value->id]) }}" method="POST" style="display:inline-block;">
-                                @csrf
-                                @method('PATCH')
-                                <input type="hidden" name="status" value="scheduled">
-                                <button type="submit" class="btn btn-primary btn-sm">Schedule</button>
-                            </form>
-
-                            <!-- Confirmed Button -->
-                            <form action="{{ route('appointments.update-status', ['appointment' => $value->id]) }}" method="POST" style="display:inline-block;">
-                                @csrf
-                                @method('PATCH')
-                                <input type="hidden" name="status" value="confirmed">
-                                <button type="submit" class="btn btn-success btn-sm">Confirm</button>
-                            </form>
-                            
-                            <a href="{{ route('followup.edit', $value->id) }}" class="btn btn-sm btn-primary">Edit</a>    
-                        </td>
-
-                      
+                        <td colspan="8" class="text-center">No records found</td>
                     </tr>
-                @endforeach
+                @else
+                    @foreach($followup as $key => $value)
+                        <tr>
+                            <td>{{ $value->id }}</td>
+                            <td>{{ $value->appointment->patient->name }}</td>
+                            <td>{{ $value->appointment->doctor->name }}</td>
+                            <td>{{ $value->appointment->hospital->name }}</td>
+                            <td>{{ $value->appointment->speciality->title }}</td>
+                            <td>{{ $value->appointment_date ? $value->appointment_date : 'No Date Available' }}</td>
+                            <td>{{ ucfirst($value->status) }}</td>
+                            <td>
+                                <a href="{{ route('followup.edit', $value->id) }}" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>    
+                                <a href="{{ route('followup.delete', $value->id) }}" class="btn btn-danger btn-circle"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>  
         </div>
@@ -97,7 +77,7 @@
 @if (Session::has('success'))
 <script>
     Swal.fire(
-    'Users!',
+    'Followup!',
     '{{Session::get("success")}}',
     'success'
     );

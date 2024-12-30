@@ -72,10 +72,10 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
     Route::get('/appointments/followup/{appointment}', [FollowupController::class, 'index'])->name('appointment.followup')->middleware('permission:view followup');
 
     Route::get('/followup-form/{appointment}', [FollowupController::class, 'create'])->name('followup-form')->middleware('permission:add followup');
-    Route::get('/appointments/followup/{id}/edit', [FollowupController::class, 'edit'])->name('followup.edit');
-    Route::put('/followup/{id}', [FollowupController::class, 'update'])->name('followup.update');
-
     Route::post('/followup-store',[FollowupController::class,'store'])->name('add-followup')->middleware('permission:add followup');
+    Route::get('/appointments/followup/{id}/edit', [FollowupController::class, 'edit'])->name('followup.edit')->middleware('permission:edit followup');
+    Route::put('/followup/update/{id}', [FollowupController::class, 'update'])->name('followup.update')->middleware('permission:edit followup');
+    Route::get('/delete/{id}',[FollowupController::class,'destroy'])->name('followup.delete')->middleware('permission:delete hospital');
 
     
     Route::post('/store',[AppointmentController::class,'store'])->name('add-appointment')->middleware('permission:add appointment');

@@ -146,4 +146,124 @@ class FollowupController extends Controller
         // Redirect with a success message
         return redirect()->route('appointment.followup',$request->appointment_id)->with('success', 'Follow-up added successfully.');
     }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    /**
+     * Show the form for editing an appointment.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        // $appointment = Appointment::findOrFail($id);
+
+        // Fetch related data for dropdowns and fields
+        $sectors = Helper::getSectors();
+        $types = Helper::getTypes();
+        $specialities = Helper::getSpecialitiesIds();
+        $states = State::all();
+        $hospitals = Helper::getHospital();
+        $doctors = Helper::getDoctor();
+        
+        $appointment = Followup::with([
+            'appointment' => function ($query) {
+                $query->select('id', 'patient_id', 'doctor_id', 'hospital_id','speciality_id')
+                    ->with([
+                        'patient' => function ($query) {
+                            $query->select('id', 'name');
+                        },
+                        'doctor' => function ($query) {
+                            $query->select('id', 'name');
+                        },
+                        'hospital' => function ($query) {
+                            $query->select('id', 'name');
+                        },
+                        'speciality' => function ($query) {
+                            $query->select('id', 'title');
+                        }
+                    ]);
+            }
+        ])->findOrFail($id);
+
+        $doctors = Helper::getDoctor(); // Fetch all doctors
+        $hospitals = Helper::getHospital(); // Fetch all hospitals
+        // echo "<pre>";
+        // print_r($specialities);
+        // echo "</pre>";
+    
+
+        $data = compact('appointment', 'specialities', 'sectors', 'types', 'states', 'hospitals', 'doctors');
+
+        return view('followup.edit')->with($data);
+    }
+
+    /**
+     * Update the specified appointment in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'opd_number' => 'required|string',
+            'opd_date' => 'nullable|date',
+            'provisional' => 'nullable',
+            'weight' => 'nullable',
+            'height' => 'nullable',
+            'temperature' => 'nullable',
+            'bp' => 'nullable',
+            'pulse' => 'nullable',
+            'spo2' => 'nullable',
+            'rr' => 'nullable',
+            'paller' => 'nullable',
+            'clubbing' => 'nullable',
+            'cyanosis' => 'nullable',
+            'oedema' => 'nullable',
+            'RS' => 'nullable',
+            'CVS' => 'nullable',
+            'CNS' => 'nullable',
+            'PA' => 'nullable',
+            'LMP' => 'nullable|date',
+            'G' => 'nullable',
+            'P' => 'nullable',
+            'L' => 'nullable',
+            'A' => 'nullable',
+            'age_of_last_child' => 'nullable',
+            'type_of_last_delivery' => 'nullable',
+            'personal_ho' => 'nullable',
+            'past_ho' => 'nullable',
+            'chief_complaint' => 'nullable',
+            'past_history' => 'nullable',
+            'family_history' => 'nullable',
+            'vitals_general_examination' => 'nullable',
+            'personal_history' => 'nullable',
+            'allergic_history' => 'nullable',
+            'obstetric_history' => 'nullable',
+            'treatment' => 'nullable',
+            'remarks' => 'nullable',
+        ]);
+    
+        // Find and update the appointment
+        $appointment = Followup::findOrFail($id);
+        $appointment->update($validatedData);
+    
+    
+        // Redirect back with a success message
+        return redirect()->route('appointment.followup',$appointment->appointment_id)->with('success', 'Followup updated successfully.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        $followup = Followup::findOrFail($id);
+        $followup->delete();
+        return redirect()->back()->with('success', 'Followup deleted successfully.'); 
+    }
 }
