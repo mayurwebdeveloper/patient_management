@@ -77,6 +77,8 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
     Route::put('/followup/update/{id}', [FollowupController::class, 'update'])->name('followup.update')->middleware('permission:edit followup');
     Route::get('/delete/{id}',[FollowupController::class,'destroy'])->name('followup.delete')->middleware('permission:delete hospital');
 
+    Route::post('/appointments/save-reports', [AppointmentController::class, 'saveReports'])->name('appointments.save-reports');
+    Route::get('/appointments/{appointment}/reports', [AppointmentController::class, 'getReports'])->name('appointments.get-reports');
     
     Route::post('/store',[AppointmentController::class,'store'])->name('add-appointment')->middleware('permission:add appointment');
 

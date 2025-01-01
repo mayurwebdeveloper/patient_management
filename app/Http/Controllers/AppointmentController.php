@@ -10,6 +10,8 @@ use App\Models\HospitalWorkingHour;
 use App\Models\Speciality;
 use App\Models\User;
 use App\Models\State;
+use App\Models\Report;
+use App\Models\AppointmentReport;
 use DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -287,6 +289,39 @@ class AppointmentController extends Controller
         }
 
         return redirect()->back()->with('error', 'Appointment not found.');
+    }
+
+    public function getReports($appointmentId)
+    {
+        $reports = Report::all();
+        $selectedReports = AppointmentReport::where('appointment_id', $appointmentId)
+                            ->pluck('report_id')
+                            ->toArray();
+        return response()->json([
+            'reports' => $reports,
+            'selected' => $selectedReports,
+        ]);
+    }
+
+    public function saveReports(Request $request)
+    {
+
+        $appointmentId = $request->appointment_id;
+        $reportIds = $request->input('report_ids', []);
+        $date = date('Y-m-d');
+
+        AppointmentReport::where('appointment_id', $appointmentId)->delete();
+
+        foreach ($reportIds as $reportId) {
+            AppointmentReport::create([
+                'appointment_id' => $appointmentId,
+                'report_id' => $reportId,
+                'date' => $date,
+                'status' => 'pending',
+            ]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Investigations updated successfully.']);
     }
 
 }
