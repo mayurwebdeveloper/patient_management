@@ -36,23 +36,23 @@
                         
                         <div class="form-group col-md-3">
                             <label for="opd_number">Patient Name :</label>
-                            <input type="text" class="form-control" value="{{ $appointment->patient->name }}" disabled>
+                            <input type="text" class="form-control" value="{{ @$appointment->patient->name }}" disabled>
                         </div>
 
                         <div class="form-group col-md-3">
                             <label for="opd_number">Doctor Name :</label>
-                            <input type="text" class="form-control" value="{{ $appointment->doctor->name }}" disabled>
+                            <input type="text" class="form-control" value="{{ @$appointment->doctor->name }}" disabled>
                         </div>
 
 
                         <div class="form-group col-md-3">
                             <label for="opd_number">Hospital Name :</label>
-                            <input type="text" class="form-control" value="{{ $appointment->hospital->name }}" disabled>
+                            <input type="text" class="form-control" value="{{ @$appointment->hospital->name }}" disabled>
                         </div>
 
                         <div class="form-group col-md-3">
                             <label for="opd_number">Speciality Name :</label>
-                            <input type="text" class="form-control" value="{{ $appointment->speciality->title }}" disabled>
+                            <input type="text" class="form-control" value="{{ @$appointment->speciality->title }}" disabled>
                         </div>
 
 
