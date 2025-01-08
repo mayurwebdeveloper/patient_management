@@ -50,6 +50,21 @@ class AppointmentController extends Controller
                 }
             ])->orderBy('opd_date', 'asc')->get();
         }else{
+
+            if (Auth::user()->hasRole('Staff Nurse')) {
+                $appointments = Appointment::with([
+                    'patient' => function ($query) {
+                        $query->select('id', 'name');
+                    },
+                    'doctor' => function ($query) {
+                        $query->select('id', 'name');
+                    },
+                    'hospital' => function ($query) {
+                        $query->select('id', 'name');
+                    }
+                ])->orderBy('opd_date', 'asc')->get();
+            }else{
+                
             $doctorId = Auth::user()->id;
             $appointments = Appointment::with([
                 'patient' => function ($query) {
@@ -65,6 +80,9 @@ class AppointmentController extends Controller
                     $query->select('id', 'title');
                 }
             ])->where('doctor_id', $doctorId)->orderBy('opd_date', 'asc')->get();
+            }
+
+
         }
 
        
@@ -137,6 +155,25 @@ class AppointmentController extends Controller
      */
     public function show(string $id)
     {
+        $sectors = Helper::getSectors();
+        $types = Helper::getTypes();
+        $specialities = Helper::getSpecialitiesIds();
+        $states = State::all();
+        $hospitals = Helper::getHospital();
+        $doctors = Helper::getDoctor();
+        
+        $appointment = Appointment::with(['doctor', 'hospital'])->findOrFail($id);
+
+        $doctors = Helper::getDoctor(); // Fetch all doctors
+        $hospitals = Helper::getHospital(); // Fetch all hospitals
+        // echo "<pre>";
+        // print_r($specialities);
+        // echo "</pre>";
+    
+
+        $data = compact('appointment', 'specialities', 'sectors', 'types', 'states', 'hospitals', 'doctors');
+
+        return view('appointment.show')->with($data);
         //
     }
 

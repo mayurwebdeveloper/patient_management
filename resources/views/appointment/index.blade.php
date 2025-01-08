@@ -73,6 +73,8 @@
                             </form>
 
                             <a href="{{ route('appointments.edit', $appointment->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                            <a href="{{ route('appointments.show', $appointment->id) }}" class="btn btn-sm btn-primary">Show</a>
+                          
                             <a href="{{ route('appointment.followup', ['appointment' => $appointment->id]) }}" class="btn btn-sm btn-primary">Followup</a>
                             <button 
                             type="button" 

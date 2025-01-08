@@ -88,6 +88,9 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
     Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::get('/appointments/{id}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit');
     
+    Route::get('/appointments/{id}/show', [AppointmentController::class, 'show'])->name('appointments.show');
+    
+
     Route::put('/appointments/{id}', [AppointmentController::class, 'update'])->name('appointments.update');
     
     // dashboard routes
