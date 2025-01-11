@@ -55,18 +55,25 @@ class AppointmentController extends Controller
         }
         // $appointment->user_id = $user->id; // Add the authenticated user's ID
 
-        // Store the appointment data
-        $appointment = new Appointment();
-        $appointment->patient_id = $user->id;
-        $appointment->hospital_id = $request->hospital_id;
-        $appointment->speciality_id = $request->department_id; // Assuming department_id maps to speciality_id
-        $appointment->doctor_id = $request->doctor_id;
-        $appointment->date = $request->date;
-        $appointment->time_slot = $request->time_slot;
-        $appointment->title = $request->title;
-        $appointment->description = $request->description;
-        $appointment->status = 'scheduled'; // or any default status you prefer
-        $appointment->save();
+        // // Store the appointment data
+        // $appointment = new Appointment();
+        // $appointment->patient_id = $user->id;
+        // $appointment->hospital_id = $request->hospital_id;
+        // $appointment->speciality_id = $request->department_id; // Assuming department_id maps to speciality_id
+        // $appointment->doctor_id = $request->doctor_id;
+        // $appointment->date = $request->date;
+        // $appointment->time_slot = $request->time_slot;
+        // $appointment->title = $request->title;
+        // $appointment->description = $request->description;
+        // $appointment->status = 'scheduled'; // or any default status you prefer
+        // $appointment->save();
+
+        $validatedData['appointment_date'] = CarbonDate::createFromFormat('Y-m-d', $request->opd_date)->format('Y-m-d');
+
+        $validatedData['opd_date'] =  CarbonDate::createFromFormat('Y-m-d', $request->opd_date)->format('Y-m-d');
+        // $validatedData['opd_date'] = $request->opd_number;
+        // Create a new appointment record
+        $appointment = Appointment::create($validatedData);
 
         return response()->json([
             'status' => true,
