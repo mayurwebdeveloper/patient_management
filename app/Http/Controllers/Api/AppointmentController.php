@@ -22,14 +22,29 @@ class AppointmentController extends Controller
 
         // Validate the incoming request data
         $validator = Validator::make($request->all(), [
-            'hospital_id' => 'required|integer',
-            // 'department_id' => 'required|integer',
+            // 'hospital_id' => 'required|integer',
+            // // 'department_id' => 'required|integer',
+            // 'doctor_id' => 'required|integer',
+            // 'date' => 'required|date',
+            // 'time_slot' => 'required|string',
+            // // 'title' => 'required|string|max:255',
+            // // 'description' => 'nullable|string',
+            // // 'token' => 'required|string',
+
             'doctor_id' => 'required|integer',
-            'date' => 'required|date',
-            'time_slot' => 'required|string',
-            // 'title' => 'required|string|max:255',
-            // 'description' => 'nullable|string',
-            // 'token' => 'required|string',
+            'hospital_id' => 'required|integer',
+            'speciality_id' => 'required|integer',
+            'opd_number' => 'nullable|string|max:255',
+            'patient_name' => 'nullable|string|max:255',
+            'age' => 'nullable|string|max:10',
+            'age_month' => 'nullable|string|max:10',
+            'mobile_number' => 'nullable|string|max:15',
+            'sex' => 'nullable|string|max:15',
+            'village' => 'nullable|string|max:50',
+            'taluka' => 'nullable|string|max:50',
+            'opd_date' => 'nullable|date'
+
+
         ]);
 
         if ($validator->fails()) {
