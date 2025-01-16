@@ -76,6 +76,17 @@
             </div>
 
             <div class="form-group col-md-3">
+                <label for="patient_name">Patient</label>
+              
+
+                <select  required class="form-control @error('patient_id ') is-invalid @enderror" name="patient_id " id="patient_id " placeholder="speciality_id">
+                    @foreach ($patients as $key => $patient)
+                        <option value="{{ $key }}" {{ $appointment->patient_id == $key ? 'selected' : '' }}>{{ $patient }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group col-md-3">
                 <label for="speciality_id">Speciality</label>
                 <select name="speciality_id" id="speciality_id" class="form-control">
                     @foreach ($specialities as $key => $speciality)
@@ -90,11 +101,7 @@
                 <label for="opd_number">OPD Number</label>
                  <input type="text" name="opd_number" id="opd_number" class="form-control" value="{{ $appointment->opd_number }}">
             </div>
-            <div class="form-group col-md-3">
-                <label for="patient_name">Patient Name</label>
-                <input type="text" name="patient_name" id="patient_name" class="form-control" value="{{ $appointment->patient_name }}">
-            
-            </div>
+
 
             <div class="form-group col-md-3">
                 <label for="age">Age</label>
@@ -115,8 +122,27 @@
                 </div>
                 @enderror
             </div>
+            
+            <div class="form-group col-md-3">
+                <label for="ipd_date">IPD Date</label>
+                <input type="date" class="form-control @error('ipd_date') is-invalid @enderror" name="ipd_date" id="ipd_date" value="{{ $appointment->ipd_date }}" placeholder="IPD Date">
+                @error('ipd_date')
+                <div class="invalid-feedback">
+                {{$message}}
+                </div>
+                @enderror
+            </div>
 
 
+            <div class="form-group col-md-3">
+                <label for="lpd_no">LPD number</label>
+                <input type="text" class="form-control @error('lpd_no') is-invalid @enderror" name="lpd_no" id="lpd_no" value="{{ $appointment->lpd_no }}" placeholder="LPD No">
+                @error('lpd_no')
+                <div class="invalid-feedback">
+                {{$message}}
+                </div>
+                @enderror
+            </div>
 
             
 

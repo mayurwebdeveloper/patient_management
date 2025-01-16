@@ -60,7 +60,10 @@ class Appointment extends Model
         'allergic_history',
         'obstetric_history',
         'treatment',
-        'remarks'
+        'remarks',
+        'is_ipd',
+        'ipd_date',
+        'lpd_no'
     ];
 
     protected $casts = [

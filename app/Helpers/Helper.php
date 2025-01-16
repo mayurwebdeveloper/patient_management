@@ -157,4 +157,13 @@ class Helper {
         return $doctor;
     }
 
+    public static function getPatients(){
+        $results = User::role('Patients')->where('status',1)->get();
+        foreach ($results as $result) {
+            $patients[$result->id] = $result->name; 
+        }
+        return $patients;
+    }
+    
+
 }
