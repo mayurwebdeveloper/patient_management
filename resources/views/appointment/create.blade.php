@@ -42,15 +42,15 @@
             </div>
 
             <div class="form-group col-md-3">
-                <label for="patient_name">Patient</label>
+                <label for="patient_id">Patient</label>
               
 
-                <select  required class="form-control @error('patient_id ') is-invalid @enderror" name="patient_id " id="patient_id " placeholder="speciality_id">
+                <select  required class="form-control @error('patient_id ') is-invalid @enderror" name="patient_id " id="patient_id " placeholder="patient_id">
                     @foreach ($patients as $key => $patient)
-                        <option value="{{ $key }}" {{ in_array($key, old('patients', [])) ? 'selected' : '' }}>{{ $patient }}</option>
+                        <option value="{{ $key }}" {{ old('patient_is') == $key ? 'selected' : '' }}>{{ $patient }}</option>
                     @endforeach
                 </select>
-                @error('patients')
+                @error('patient_id')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>

@@ -13,6 +13,7 @@ class Appointment extends Model
         'hospital_id',
         'speciality_id', // Use speciality_id for department_id
         'doctor_id',
+        'patient_id',
         'date',
         'time_slot',
         'title',

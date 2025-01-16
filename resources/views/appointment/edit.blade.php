@@ -2,7 +2,7 @@
 
 
 @push('title')
-<title>Add Appointment</title>
+<title>Edit Appointment</title>
 @endpush
 
 
@@ -11,7 +11,7 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3" id="table-card-title">
-        <h6 class="m-0 font-weight-bold text-primary">Add Appointment</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Edit Appointment</h6>
     </div>
     <div class="card-body">
 
@@ -76,14 +76,19 @@
             </div>
 
             <div class="form-group col-md-3">
-                <label for="patient_name">Patient</label>
+                <label for="patient_id">Patient</label>
               
 
-                <select  required class="form-control @error('patient_id ') is-invalid @enderror" name="patient_id " id="patient_id " placeholder="speciality_id">
+                <select  required class="form-control" name="patient_id" id="patient_id" placeholder="patient_id">
                     @foreach ($patients as $key => $patient)
                         <option value="{{ $key }}" {{ $appointment->patient_id == $key ? 'selected' : '' }}>{{ $patient }}</option>
                     @endforeach
                 </select>
+                @error('patient_id')
+                <div class="invalid-feedback">
+                {{$message}}
+                </div>
+                @enderror
             </div>
 
             <div class="form-group col-md-3">

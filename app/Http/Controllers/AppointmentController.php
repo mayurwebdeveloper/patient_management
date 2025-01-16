@@ -226,7 +226,7 @@ class AppointmentController extends Controller
         // Validate incoming request data
         $validatedData = $request->validate([
             'doctor_id' => 'required|integer',
-            'patient_id ' => 'required|integer',
+            'patient_id ' => 'required',
             'hospital_id' => 'required|integer',
             'speciality_id' => 'required|integer',
             'opd_number' => 'nullable|string|max:255',
@@ -260,7 +260,9 @@ class AppointmentController extends Controller
      */
     public function moupdate(Request $request, $id)
     {
+        
         $validatedData = $request->validate([
+            'patient_id ' => 'required',
             'provisional' => 'nullable',
             'weight' => 'nullable',
             'height' => 'nullable',
