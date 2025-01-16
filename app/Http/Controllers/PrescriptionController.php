@@ -8,30 +8,54 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use PDF; // Use the PDF facade
 use Illuminate\Support\Facades\Storage;
-
+use Spatie\Permission\Models\Role;
+use DataTables;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class PrescriptionController extends Controller
 {
     public function index()
     {
         // Show all prescriptions (for a doctor, you can filter by doctor_id)
-        $prescriptions = Prescription::with('medicines', 'doctor', 'patient')->get();
+        
+        if (Auth::user()->hasRole('Pharmacist')) {
+            $pharmacist_id = Auth::user()->id;
+            $prescriptions = Prescription::with('medicines', 'doctor', 'patient')->where(['pharmacist_id'=>$pharmacist_id])->get();
+
+        }else{
+            $prescriptions = Prescription::with('medicines', 'doctor', 'patient')->get();
+        }
+
+        
         return view('prescriptions.index', compact('prescriptions'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
          // Fetch the doctors where the role_id is 2
          $doctors = User::role('Doctor')->get(); // Use the role name, not 'role_id'
 
+         $appointment_id = $request->appointment;
 
          // Fetch the patients (assuming all users are patients except doctors, or you have another way to determine patients)
-         $patients = User::role('Patient')->get(); // Use role name for patients
+         $patients = User::role('Patients')->get(); // Use role name for patients
  
          // Fetch appointments (you may filter it based on criteria)
          $appointments = Appointment::all();
+
+        if($appointment_id != ""){
+          $appointment = Appointment::where(['id'=>$appointment_id])->get();
+        }else{
+            $appointment = [];
+        }
+
+        $pharmacist = User::role('Pharmacist')->get(); // Use role name for patients
+         
  
-         return view('prescriptions.create', compact('doctors', 'patients', 'appointments'));
+         return view('prescriptions.create', compact('doctors', 'patients', 'appointments','appointment_id','appointment','pharmacist'));
         // Show the form to create a new prescription
         // return view('prescriptions.create');
     }
@@ -46,12 +70,16 @@ class PrescriptionController extends Controller
             'medicines.*.dosage' => 'required|string',
             'medicines.*.frequency' => 'required|string',
         ]);
+
+        
     
         // Create the prescription
         $prescription = Prescription::create([
             'doctor_id' => $request->doctor_id,
             'patient_id' => $request->patient_id,
+            'pharmacist_id' => $request->pharmacist_id,
             'notes' => $request->notes,
+            'status'=>'transferred'
         ]);
     
         // Add medicines
@@ -92,7 +120,7 @@ class PrescriptionController extends Controller
 {
     $prescription = Prescription::with('medicines')->findOrFail($id);
     $doctors = User::role('Doctor')->get(); // Fetch doctors
-    $patients = User::role('Patient')->get(); // Fetch patients
+    $patients = User::role('Patients')->get(); // Fetch patie+3nts
 
     return view('prescriptions.edit', compact('prescription', 'doctors', 'patients'));
 }

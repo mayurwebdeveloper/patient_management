@@ -18,15 +18,15 @@
     <div class="card-body">
        <form action="{{ route('prescriptions.store') }}" method="POST">
         @csrf
-
+        <div class="col-md-6">
           <!-- Appointment Dropdown -->
         <div class="form-group">
             <label for="appointment_id">Select Appointment</label>
             <select name="appointment_id" id="appointment_id" class="form-control" required>
                 <option value="">-- Select Appointment --</option>
                 @foreach($appointments as $appointment)
-                    <option value="{{ $appointment->id }}">
-                        Appointment with {{ $appointment->patient->name }} on {{ $appointment->date }}
+                    <option value="{{ $appointment->id }}"  {{ $appointment->id == $appointment_id ? 'selected' : '' }}  >
+                        Appointment with {{ $appointment_id }} {{ @$appointment->patient->name == "" ? $appointment->patient_name : @$appointment->patient->name }} on {{ $appointment->opd_date }}
                     </option>
                 @endforeach
             </select>
@@ -38,7 +38,7 @@
             <select name="doctor_id" id="doctor_id" class="form-control" required>
                 <option value="">-- Select Doctor --</option>
                 @foreach($doctors as $doctor)
-                    <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                    <option value="{{ $doctor->id }}" {{ $appointment->doctor_id == $doctor->id ? 'selected' : '' }} >{{ $doctor->name }}</option>
                 @endforeach
             </select>
         </div>
@@ -49,11 +49,26 @@
             <select name="patient_id" id="patient_id" class="form-control" required>
                 <option value="">-- Select Patient --</option>
                 @foreach($patients as $patient)
-                    <option value="{{ $patient->id }}">{{ $patient->name }}</option>
+                    <option value="{{ $patient->id }}" {{ $appointment->patient_id == $patient->id ? 'selected' : '' }} >{{ $patient->name }}</option>
                 @endforeach
             </select>
         </div>
-
+        <div class="form-group">
+        <div class="checkbox">
+            <label>
+              <input type="checkbox" data-toggle="toggle" checked>
+              Transfer to Pharmasist
+            </label>
+          </div>
+          <select name="pharmacist" id="pharmacist_id" class="form-control">
+            <option value="">-- Select Pharmasist --</option>
+                @foreach($pharmacist as $pharm)
+                    <option value="{{ $pharm->id }}" >{{ $pharm->name }}</option>
+                @endforeach
+            </select>
+          
+        </div>
+    </div>
         <!-- Notes for Prescription -->
         <div class="form-group">
             <label for="notes">Notes</label>
@@ -89,7 +104,7 @@
                 </div>
             </div>
         </div>
-
+    
 
 
         <button type="button" id="add-medicine" class="btn btn-secondary">Add Another Medicine</button>

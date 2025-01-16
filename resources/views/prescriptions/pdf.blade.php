@@ -23,10 +23,10 @@
     <!-- Header with Clinic Information -->
     <div class="header">
         <div class="clinic-info">
-            <div class="clinic-name">{{ $prescription->appointment->hospital->name }}</div>
+            <div class="clinic-name">{{ @$prescription->appointment->hospital->name }}</div>
             <div class="clinic-address">
-                {{ $prescription->appointment->hospital->address }}<br>
-                Phone: {{ $prescription->appointment->hospital->mo }} | Email: {{ $prescription->appointment->hospital->email }}
+                {{ @$prescription->appointment->hospital->address }}<br>
+                Phone: {{ @$prescription->appointment->hospital->mo }} | Email: {{ @$prescription->appointment->hospital->email }}
             </div>
         </div>
     </div>
