@@ -133,6 +133,9 @@
                             <a href="{{ route('appointments.show', $appointment->id) }}" class="btn btn-sm btn-primary">Show</a>
                           
                             <a href="{{ route('appointment.followup', ['appointment' => $appointment->id]) }}" class="btn btn-sm btn-primary">Followup</a>
+
+                            <a href="{{ route('prescriptions.create', ['appointment' => $appointment->id]) }}" class="btn btn-sm btn-primary">Presecription</a>
+
                             <button 
                                 type="button" 
                                 class="btn btn-sm btn-warning" 
