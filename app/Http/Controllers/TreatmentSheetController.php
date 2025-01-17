@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 use App\Models\TreatmentSheet;
-
+use PDF; // Use the PDF facade
 class TreatmentSheetController extends Controller
 {
     public function show($appointmentId)
@@ -64,4 +64,16 @@ class TreatmentSheetController extends Controller
 
         return redirect()->back()->with('success', 'Treatment sheet updated successfully.');
     }
+
+    public function generatePDF($id)
+    {
+        $appointment = Appointment::with([
+        'patient' => function ($query) {
+            $query->select('id', 'name');
+        }])->findOrFail($id);
+        $treatmentSheet = TreatmentSheet::with(['appointment'])->where('appointment_id',$id)->get();
+        $pdf = PDF::loadView('treatment_sheet.pdf', compact('treatmentSheet','appointment'));
+        return $pdf->download('treatmentsheet_'.$id.'.pdf');
+    }
+
 }

@@ -50,6 +50,7 @@
         </table>
         <button type="button" id="add-more" class="btn btn-primary">Add More</button>
         <button type="submit" class="btn btn-success">Save</button>
+        <a href="{{ route('treatment-sheet.pdf',  $appointment->id) }}" class="btn btn-warning">Download PDF</a>
     </form>
 </div>
 <script>
