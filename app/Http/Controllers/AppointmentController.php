@@ -104,8 +104,8 @@ class AppointmentController extends Controller
         $states = State::all();
         $hospitals = Helper::getHospital(); 
         $doctors = Helper::getDoctor(); 
-        
-        $data = compact('specialities','sectors','types','states','hospitals','doctors');
+        $patients = Helper::getPatients();
+        $data = compact('specialities','sectors','types','states','hospitals','doctors','patients');
         return view('appointment.create')->with($data);
         //
     }
@@ -121,17 +121,19 @@ class AppointmentController extends Controller
         // Validate the incoming request data
         $validatedData = $request->validate([
             'doctor_id' => 'required|integer',
+            'patient_id ' => 'required|integer',
             'hospital_id' => 'required|integer',
             'speciality_id' => 'required|integer',
             'opd_number' => 'nullable|string|max:255',
-            'patient_name' => 'nullable|string|max:255',
             'age' => 'nullable|string|max:10',
             'age_month' => 'nullable|string|max:10',
             'mobile_number' => 'nullable|string|max:15',
             'sex' => 'nullable|string|max:15',
             'village' => 'nullable|string|max:50',
             'taluka' => 'nullable|string|max:50',
-            'opd_date' => 'nullable|date',
+            'opd_date' => 'required|date',
+            'ipd_date' => 'nullable|date',
+            'lpd_no' => 'nullable|string',
         ]);
 
         // echo $request->opd_number;
@@ -205,9 +207,9 @@ class AppointmentController extends Controller
         // echo "<pre>";
         // print_r($specialities);
         // echo "</pre>";
-    
+        $patients = Helper::getPatients();
 
-        $data = compact('appointment', 'specialities', 'sectors', 'types', 'states', 'hospitals', 'doctors');
+        $data = compact('appointment', 'specialities', 'sectors', 'types', 'states', 'hospitals', 'doctors','patients');
 
         return view('appointment.edit')->with($data);
     }
@@ -224,17 +226,19 @@ class AppointmentController extends Controller
         // Validate incoming request data
         $validatedData = $request->validate([
             'doctor_id' => 'required|integer',
+            'patient_id ' => 'required',
             'hospital_id' => 'required|integer',
             'speciality_id' => 'required|integer',
             'opd_number' => 'nullable|string|max:255',
-            'patient_name' => 'nullable|string|max:255',
             'age' => 'nullable|string|max:10',
             'age_month' => 'nullable|string|max:10',
             'mobile_number' => 'nullable|string|max:15',
             'sex' => 'nullable|string|max:15',
             'village' => 'nullable|string|max:50',
             'taluka' => 'nullable|string|max:50',
-            'opd_date' => 'nullable|date',
+            'opd_date' => 'required|date',
+            'ipd_date' => 'nullable|date',
+            'lpd_no' => 'nullable|string'
         ]);
 
         $validatedData['appointment_date'] = CarbonDate::createFromFormat('Y-m-d', $request->opd_date)->format('Y-m-d');
@@ -256,7 +260,9 @@ class AppointmentController extends Controller
      */
     public function moupdate(Request $request, $id)
     {
+        
         $validatedData = $request->validate([
+            'patient_id ' => 'required',
             'provisional' => 'nullable',
             'weight' => 'nullable',
             'height' => 'nullable',
@@ -291,7 +297,11 @@ class AppointmentController extends Controller
             'obstetric_history' => 'nullable',
             'treatment' => 'nullable',
             'remarks' => 'nullable',
+            'opd_date' => 'required|date',
+            'ipd_date' => 'nullable|date',
+            'lpd_no' => 'nullable'
         ]);
+        // dd($validatedData);
     
         // Find and update the appointment
         $appointment = Appointment::findOrFail($id);
@@ -359,6 +369,15 @@ class AppointmentController extends Controller
         }
 
         return response()->json(['success' => true, 'message' => 'Investigations updated successfully.']);
+    }
+
+    public function updateAdmitStatus(Request $request, $id)
+    {
+        $appointment = Appointment::findOrFail($id);
+        $appointment->is_ipd = $request->input('is_ipd');
+        $appointment->save();
+
+        return response()->json(['success' => true, 'message' => 'Admitted status updated successfully']);
     }
 
 }

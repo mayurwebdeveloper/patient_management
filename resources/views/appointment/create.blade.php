@@ -42,12 +42,18 @@
             </div>
 
             <div class="form-group col-md-3">
-                <label for="patient_name">Patient Name.</label>
-                <input type="text" class="form-control @error('patient_name') is-invalid @enderror" name="patient_name" id="patient_name" value="{{old('patient_name')}}" placeholder="Patient Name">
-                @error('patient_name')
-                <div class="invalid-feedback">
-                {{$message}}
-                </div>
+                <label for="patient_id">Patient</label>
+              
+
+                <select  required class="form-control @error('patient_id ') is-invalid @enderror" name="patient_id " id="patient_id " placeholder="patient_id">
+                    @foreach ($patients as $key => $patient)
+                        <option value="{{ $key }}" {{ old('patient_is') == $key ? 'selected' : '' }}>{{ $patient }}</option>
+                    @endforeach
+                </select>
+                @error('patient_id')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
                 @enderror
             </div>
 
@@ -117,6 +123,30 @@
                 </div>
                 @enderror
             </div>
+
+
+            <div class="form-group col-md-3">
+                <label for="ipd_date">IPD Date</label>
+                <input type="date" class="form-control @error('ipd_date') is-invalid @enderror" name="ipd_date" id="ipd_date" value="{{old('ipd_date')}}" placeholder="IPD Date">
+                @error('ipd_date')
+                <div class="invalid-feedback">
+                {{$message}}
+                </div>
+                @enderror
+            </div>
+
+
+            <div class="form-group col-md-3">
+                <label for="lpd_no">LPD number</label>
+                <input type="text" class="form-control @error('lpd_no') is-invalid @enderror" name="lpd_no" id="lpd_no" value="{{old('lpd_no')}}" placeholder="LPD No">
+                @error('lpd_no')
+                <div class="invalid-feedback">
+                {{$message}}
+                </div>
+                @enderror
+            </div>
+
+            
 
 
                

@@ -19,6 +19,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\FollowupController;
+use App\Http\Controllers\TreatmentSheetController;
 
 
 
@@ -75,15 +76,18 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
     Route::post('/followup-store',[FollowupController::class,'store'])->name('add-followup')->middleware('permission:add followup');
     Route::get('/appointments/followup/{id}/edit', [FollowupController::class, 'edit'])->name('followup.edit')->middleware('permission:edit followup');
     Route::put('/followup/update/{id}', [FollowupController::class, 'update'])->name('followup.update')->middleware('permission:edit followup');
-    Route::get('/delete/{id}',[FollowupController::class,'destroy'])->name('followup.delete')->middleware('permission:delete hospital');
+    Route::get('/delete/{id}',[FollowupController::class,'destroy'])->name('followup.delete')->middleware('permission:delete followup');
 
     Route::post('/appointments/save-reports', [AppointmentController::class, 'saveReports'])->name('appointments.save-reports');
     Route::get('/appointments/{appointment}/reports', [AppointmentController::class, 'getReports'])->name('appointments.get-reports');
     
     Route::post('/store',[AppointmentController::class,'store'])->name('add-appointment')->middleware('permission:add appointment');
-
+    
     Route::put('/appointments/moupdate/{id}', [AppointmentController::class, 'moupdate'])->name('appointments.moupdate');
-       
+    Route::get('/appointments/update-admit-status/{appointment}', [AppointmentController::class, 'updateAdmitStatus']);
+    Route::get('/treatment-sheet/{appointment}', [TreatmentSheetController::class, 'show'])->name('treatment-sheet.show')->middleware('permission:show treatment sheet');
+    Route::post('/treatment-sheet/{appointment}', [TreatmentSheetController::class, 'store'])->name('treatment-sheet.store')->middleware('permission:show treatment sheet');
+    Route::get('/treatment-sheet/{id}/pdf', [TreatmentSheetController::class, 'generatePDF'])->name('treatment-sheet.pdf')->middleware('download treatment sheet');
 
     Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::get('/appointments/{id}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit');
