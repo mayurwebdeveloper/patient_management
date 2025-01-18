@@ -82,6 +82,8 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
     Route::get('/appointments/{appointment}/reports', [AppointmentController::class, 'getReports'])->name('appointments.get-reports');
     
     Route::post('/store',[AppointmentController::class,'store'])->name('add-appointment')->middleware('permission:add appointment');
+
+    Route::post('/save-patient-info', [AppointmentController::class, 'savePatientInfo'])->name('save-patient-info');
     
     Route::put('/appointments/moupdate/{id}', [AppointmentController::class, 'moupdate'])->name('appointments.moupdate');
     Route::get('/appointments/update-admit-status/{appointment}', [AppointmentController::class, 'updateAdmitStatus']);

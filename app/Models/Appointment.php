@@ -28,6 +28,7 @@ class Appointment extends Model
         'village',
         'taluka',
         'opd_date',
+        'appointment_date',
         'provisional',
         'weight',
         'height',
@@ -67,10 +68,7 @@ class Appointment extends Model
         'lpd_no'
     ];
 
-    protected $casts = [
-        'appointment_date' => 'datetime',
-    ];
-    
+
 
     public function patient()
     {
