@@ -66,6 +66,7 @@ class PrescriptionController extends Controller
             'appointment_id' => 'required|exists:appointments,id',
             'doctor_id' => 'required|exists:users,id',
             'patient_id' => 'required|exists:users,id',
+            // 'pharmacist_id'=> 'required',
             'medicines.*.name' => 'required|string',
             'medicines.*.dosage' => 'required|string',
             'medicines.*.frequency' => 'required|string',

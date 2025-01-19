@@ -45,9 +45,9 @@
                 <label for="patient_id">Patient</label>
               
 
-                <select  required class="form-control @error('patient_id ') is-invalid @enderror" name="patient_id " id="patient_id " placeholder="patient_id">
+                <select  required class="form-control @error('patient_id ') is-invalid @enderror" name="patient_id" id="patient_id" placeholder="patient_id">
                     @foreach ($patients as $key => $patient)
-                        <option value="{{ $key }}" {{ old('patient_is') == $key ? 'selected' : '' }}>{{ $patient }}</option>
+                        <option value="{{ $key }}" {{ old('patient_id') == $key ? 'selected' : '' }}>{{ $patient }}</option>
                     @endforeach
                 </select>
                 @error('patient_id')

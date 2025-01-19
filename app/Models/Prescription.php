@@ -8,7 +8,7 @@ class Prescription extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['doctor_id', 'patient_id', 'notes','status','pharmacist_id'];
+    protected $fillable = ['doctor_id', 'pharmacist_id', 'patient_id', 'notes','status'];
 
     // Define the relationship between Prescription and Appointment
     public function appointment()

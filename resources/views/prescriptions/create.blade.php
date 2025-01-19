@@ -60,7 +60,7 @@
               Transfer to Pharmasist
             </label>
           </div>
-          <select name="pharmacist" id="pharmacist_id" class="form-control">
+          <select name="pharmacist_id" id="pharmacist_id" class="form-control">
             <option value="">-- Select Pharmasist --</option>
                 @foreach($pharmacist as $pharm)
                     <option value="{{ $pharm->id }}" >{{ $pharm->name }}</option>

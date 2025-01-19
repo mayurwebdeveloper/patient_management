@@ -118,12 +118,15 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
+        // echo "<pre>";
+        // print_r($_POST);
+        // exit;
         // Validate the incoming request data
         $validatedData = $request->validate([
-            'doctor_id' => 'required|integer',
-            'patient_id ' => 'required|integer',
-            'hospital_id' => 'required|integer',
-            'speciality_id' => 'required|integer',
+            'doctor_id' => 'required',
+            'patient_id ' => 'required',
+            'hospital_id' => 'required',
+            'speciality_id' => 'required',
             'opd_number' => 'nullable|string|max:255',
             'age' => 'nullable|string|max:10',
             'age_month' => 'nullable|string|max:10',
