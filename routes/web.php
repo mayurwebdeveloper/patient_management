@@ -82,7 +82,13 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
     Route::get('/appointments/{appointment}/reports', [AppointmentController::class, 'getReports'])->name('appointments.get-reports');
     
     Route::post('/store',[AppointmentController::class,'store'])->name('add-appointment')->middleware('permission:add appointment');
-    
+
+    Route::post('/save-patient-info', [AppointmentController::class, 'savePatientInfo'])->name('save-patient-info');
+    Route::post('/save-general-exam', [AppointmentController::class, 'saveGeneralExam'])->name('save-general-exam');
+    Route::post('/save-systemic-exam', [AppointmentController::class, 'saveSystemicExam'])->name('save-systemic-exam');
+    Route::post('/save-history-exam', [AppointmentController::class, 'saveHistoryExam'])->name('save-history-exam');
+    Route::post('/save-complaint-exam', [AppointmentController::class, 'saveComplaintExam'])->name('save-complaint-exam');
+
     Route::put('/appointments/moupdate/{id}', [AppointmentController::class, 'moupdate'])->name('appointments.moupdate');
     Route::get('/appointments/update-admit-status/{appointment}', [AppointmentController::class, 'updateAdmitStatus']);
     Route::get('/treatment-sheet/{appointment}', [TreatmentSheetController::class, 'show'])->name('treatment-sheet.show')->middleware('permission:show treatment sheet');

@@ -48,7 +48,7 @@ class AppointmentController extends Controller
                 'hospital' => function ($query) {
                     $query->select('id', 'name');
                 }
-            ])->orderBy('opd_date', 'asc')->get();
+            ])->orderBy('id', 'desc')->get();
         }else{
 
             if (Auth::user()->hasRole('Staff Nurse')) {
@@ -123,34 +123,70 @@ class AppointmentController extends Controller
         // exit;
         // Validate the incoming request data
         $validatedData = $request->validate([
+
+            'patient_id' => 'required',
             'doctor_id' => 'required',
-            'patient_id ' => 'required',
-            'hospital_id' => 'required',
             'speciality_id' => 'required',
+            'hospital_id' => 'required',
             'opd_number' => 'nullable|string|max:255',
-            'age' => 'nullable|string|max:10',
-            'age_month' => 'nullable|string|max:10',
-            'mobile_number' => 'nullable|string|max:15',
-            'sex' => 'nullable|string|max:15',
-            'village' => 'nullable|string|max:50',
-            'taluka' => 'nullable|string|max:50',
-            'opd_date' => 'required|date',
+            'age' => 'nullable|integer|min:0',
+            'age_month' => 'nullable|integer|min:0',
+            'village' => 'nullable|string|max:255',
+            'taluka' => 'nullable|string|max:255',
+            'sex' => 'nullable|string|in:male,female,other',
+            'mobile_number' => 'nullable|digits:10',
+            'opd_date' => 'nullable|date',
             'ipd_date' => 'nullable|date',
-            'lpd_no' => 'nullable|string',
+            'lpd_no' => 'nullable|string|max:255',
+            'provisional' => 'nullable|string|max:255',
+            'weight' => 'nullable|numeric|min:0',
+            'height' => 'nullable|numeric|min:0',
+            'temprature' => 'nullable|numeric|min:0',
+            'pulse' => 'nullable|numeric|min:0',
+            'bp' => 'nullable|string|max:255',
+            'spo2' => 'nullable|numeric|min:0',
+            'rr' => 'nullable|numeric|min:0',
+            'RS' => 'nullable|string|max:255',
+            'CVS' => 'nullable|string|max:255',
+            'CNS' => 'nullable|string|max:255',
+            'PA' => 'nullable|string|max:255',
+            'LMP' => 'nullable|date',
+            'G' => 'nullable|string|max:255',
+            'P' => 'nullable|string|max:255',
+            'L' => 'nullable|string|max:255',
+            'A' => 'nullable|string|max:255',
+            'age_of_last_child' => 'nullable|string|max:255',
+            'type_of_last_delivery' => 'nullable|string|max:255',
+            'personal_ho' => 'nullable|string',
+            'past_ho' => 'nullable|string',
+            'chief_complaint' => 'nullable|string',
+            'past_history' => 'nullable|string',
+            'family_history' => 'nullable|string',
+            'vitals_general_examination' => 'nullable|string',
+            'personal_history' => 'nullable|string',
+            'allergic_history' => 'nullable|string',
+            'obstetric_history' => 'nullable|string',
+            'treatment' => 'nullable|string',
+            'remarks' => 'nullable|string',
         ]);
 
+        // Save data to the appointments table
+        
         // echo $request->opd_number;
         // exit;
 
-        $validatedData['appointment_date'] = CarbonDate::createFromFormat('Y-m-d', $request->opd_date)->format('Y-m-d');
+        $validatedData['appointment_date'] = $request->opd_date;
 
         $validatedData['opd_date'] =  CarbonDate::createFromFormat('Y-m-d', $request->opd_date)->format('Y-m-d');
         // $validatedData['opd_date'] = $request->opd_number;
         // Create a new appointment record
-        $appointment = Appointment::create($validatedData);
+        $appointment = new Appointment();
+        $appointment->fill($validatedData);
+        $appointment->save();
+
 
         // Return a JSON response
-        return redirect()->back();
+        return redirect()->route('doctor.appointments')->with('success', 'Appointment created successfully.');
 
 
     }
@@ -251,7 +287,7 @@ class AppointmentController extends Controller
         $appointment->update($validatedData);
 
         // Redirect back with a success message
-        return redirect()->route('appointments.index')->with('success', 'Appointment updated successfully.');
+        return redirect()->route('doctor.appointments')->with('success', 'Appointment updated successfully.');
     }
 
     /**
@@ -381,6 +417,115 @@ class AppointmentController extends Controller
         $appointment->save();
 
         return response()->json(['success' => true, 'message' => 'Admitted status updated successfully']);
+    }
+
+    public function savePatientInfo(Request $request)
+    {
+        
+        $validated = $request->validate([
+            'patient_id' => 'required',
+            'doctor_id' => 'required',
+            'speciality_id' => 'required',
+            'hospital_id' => 'required',
+            'opd_number' => 'required',
+            'age' => 'nullable|integer|min:0',
+            'age_month' => 'nullable|integer|min:0',
+            'village' => 'nullable|string|max:255',
+            'taluka' => 'nullable|string|max:255',
+            'sex' => 'nullable|string|in:male,female,other',
+            'mobile_number' => 'nullable|digits:10',
+            'opd_date' => 'required|date',
+            'ipd_date' => 'nullable|date',
+            'lpd_no' => 'nullable|string|max:255',
+        ]);
+        $validated['appointment_date'] = $request->opd_date;
+
+        $validated['opd_date'] =  CarbonDate::createFromFormat('Y-m-d', $request->opd_date)->format('Y-m-d');
+        $appointment = Appointment::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'appointment_id' => $appointment->id,
+        ]);
+    }
+
+    public function saveGeneralExam(Request $request)
+    {
+        $validated = $request->validate([
+            'appointment_id' => 'required|exists:appointments,id',
+            'provisional' => 'nullable|string|max:255',
+            'weight' => 'nullable|numeric|min:0',
+            'height' => 'nullable|numeric|min:0',
+            'temprature' => 'nullable|numeric|min:0',
+            'pulse' => 'nullable|numeric|min:0',
+            'bp' => 'nullable|string|max:255',
+            'spo2' => 'nullable|numeric|min:0',
+            'rr' => 'nullable|numeric|min:0',
+        ]);
+
+        $appointment = Appointment::findOrFail($request->appointment_id);
+        $appointment->update($validated);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function saveSystemicExam(Request $request)
+    {
+        $validated = $request->validate([
+            'appointment_id' => 'required|exists:appointments,id',
+            'rr' => 'nullable|numeric|min:0',
+            'RS' => 'nullable|string|max:255',
+            'CVS' => 'nullable|string|max:255',
+            'CNS' => 'nullable|string|max:255',
+            'PA' => 'nullable|string|max:255',
+        ]);
+
+        $appointment = Appointment::findOrFail($request->appointment_id);
+        $appointment->update($validated);
+        return response()->json(['success' => true]);
+    }
+
+    public function saveHistoryExam(Request $request)
+    {
+        
+        $validated = $request->validate([
+            'appointment_id' => 'required|exists:appointments,id',
+            'LMP' => 'nullable|date',
+            'G' => 'nullable|string|max:255',
+            'P' => 'nullable|string|max:255',
+            'L' => 'nullable|string|max:255',
+            'A' => 'nullable|string|max:255',
+            'age_of_last_child' => 'nullable|string|max:255',
+            'type_of_last_delivery' => 'nullable|string|max:255',
+            'personal_ho' => 'nullable|string',
+            'past_ho' => 'nullable|string',
+        ]);
+
+        $appointment = Appointment::findOrFail($request->appointment_id);
+        $appointment->update($validated);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function saveComplaintExam(Request $request)
+    {
+        $validated = $request->validate([
+            'appointment_id' => 'required|exists:appointments,id',
+            'chief_complaint' => 'nullable|string',
+            'past_history' => 'nullable|string',
+            'family_history' => 'nullable|string',
+            'vitals_general_examination' => 'nullable|string',
+            'personal_history' => 'nullable|string',
+            'allergic_history' => 'nullable|string',
+            'obstetric_history' => 'nullable|string',
+            'treatment' => 'nullable|string',
+            'remarks' => 'nullable|string',
+        ]);
+
+        $appointment = Appointment::findOrFail($request->appointment_id);
+        $appointment->update($validated);
+
+        return response()->json(['success' => true]);
     }
 
 }
