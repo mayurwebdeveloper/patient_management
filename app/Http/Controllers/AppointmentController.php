@@ -541,7 +541,7 @@ class AppointmentController extends Controller
             'opd_date' => 'required|date',
             'ipd_date' => 'nullable|date',
             'lpd_no' => 'nullable|string|max:255',
-            'appointment_status' => 'nullable'
+            'status' => 'nullable'
         ]);
         $appointment = Appointment::findOrFail($id);
         if($request->opd_date != $appointment->opd_date){
@@ -559,7 +559,6 @@ class AppointmentController extends Controller
     public function updateGeneralExam(Request $request, $id)
     {
         $validated = $request->validate([
-            'appointment_id' => 'required|exists:appointments,id',
             'provisional' => 'nullable|string|max:255',
             'weight' => 'nullable|numeric|min:0',
             'height' => 'nullable|numeric|min:0',
@@ -568,6 +567,10 @@ class AppointmentController extends Controller
             'bp' => 'nullable|string|max:255',
             'spo2' => 'nullable|numeric|min:0',
             'rr' => 'nullable|numeric|min:0',
+            'paller' => 'nullable',
+            'clubbing' => 'nullable',
+            'cyanosis' => 'nullable',
+            'oedema' => 'nullable',
         ]);
 
         $appointment = Appointment::findOrFail($id);
@@ -579,7 +582,6 @@ class AppointmentController extends Controller
     public function updateSystemicExam(Request $request, $id)
     {
         $validated = $request->validate([
-            'appointment_id' => 'required|exists:appointments,id',
             'rr' => 'nullable|numeric|min:0',
             'RS' => 'nullable|string|max:255',
             'CVS' => 'nullable|string|max:255',
@@ -596,7 +598,6 @@ class AppointmentController extends Controller
     {
         
         $validated = $request->validate([
-            'appointment_id' => 'required|exists:appointments,id',
             'LMP' => 'nullable|date',
             'G' => 'nullable|string|max:255',
             'P' => 'nullable|string|max:255',
@@ -617,7 +618,6 @@ class AppointmentController extends Controller
     public function updateComplaintExam(Request $request, $id)
     {
         $validated = $request->validate([
-            'appointment_id' => 'required|exists:appointments,id',
             'chief_complaint' => 'nullable|string',
             'past_history' => 'nullable|string',
             'family_history' => 'nullable|string',

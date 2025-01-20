@@ -48,7 +48,7 @@ $(document).ready(function () {
     $('#save-general-exam').click(function () {
         let formData = $('#form-general-exam').serialize();
         $.ajax({
-            url: $('#form-general-info').attr('action'),
+            url: $('#form-general-exam').attr('action'),
             method: "POST",
             data: formData,
             success: function (response) {
@@ -89,7 +89,7 @@ $(document).ready(function () {
     $('#save-systemic-exam').click(function () {
         let formData = $('#form-systemic-exam').serialize();
         $.ajax({
-            url: $('#form-systemic-info').attr('action'),
+            url: $('#form-systemic-exam').attr('action'),
             method: "POST",
             data: formData,
             success: function (response) {
@@ -129,7 +129,7 @@ $(document).ready(function () {
     $('#save-history-exam').click(function () {
         let formData = $('#form-history-exam').serialize();
         $.ajax({
-            url: $('#form-history-info').attr('action'),
+            url: $('#form-history-exam').attr('action'),
             method: "POST",
             data: formData,
             success: function (response) {
@@ -170,7 +170,7 @@ $(document).ready(function () {
 
         let formData = $('#form-complaint-exam').serialize();
         $.ajax({
-            url: $('#form-complaint-info').attr('action'),
+            url: $('#form-complaint-exam').attr('action'),
             method: "POST",
             data: formData,
             success: function (response) {

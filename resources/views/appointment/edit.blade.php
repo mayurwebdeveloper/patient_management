@@ -176,9 +176,8 @@
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label for="appointment_status">Appointment Status</label>
-                                <select name="appointment_status" id="appointment_status" class="form-control">
-                                    <option value="">Select Status</option>
+                                <label for="status">Appointment Status</label>
+                                <select name="status" id="status" class="form-control">
                                     <option value="confirmed" {{ $appointment->status == "confirmed" ? 'selected' : '' }}>Confirmed</option>
                                     <option value="pending"  {{ $appointment->status == "pending" ? 'selected' : '' }}>Pending</option>
                                     <option value="cancelled"  {{ $appointment->status == "cancelled" ? 'selected' : '' }}>Cancelled</option>
