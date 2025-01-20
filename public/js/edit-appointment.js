@@ -1,14 +1,12 @@
 $(document).ready(function () {
     let appointmentId = null;
 
-    // Disable all tabs except the first one on page load
-    $('.appointmentTab .nav-link').not('#nav-patient-tab').addClass('disabled').attr('aria-disabled', 'true');
-
+   
     // Save Patient Info (First Tab)
     $('#save-patient-info').click(function () {
         let formData = $('#form-patient-info').serialize() + '&_token=' + $('meta[name="csrf-token"]').attr('content');
         $.ajax({
-            url: "/admin/save-patient-info",
+            url: $('#form-patient-info').attr('action'),
             method: "POST",
             data: formData,
             success: function (response) {
@@ -16,11 +14,7 @@ $(document).ready(function () {
                 $('.is-invalid').removeClass('is-invalid');
                 if (response.success) {
                     appointmentId = response.appointment_id; // Store the appointment ID
-                    $('.appointment_id').val(appointmentId); // Set the hidden field value for subsequent tabs
-
-                    // Enable the next tab
-                    $('#nav-general-tab').removeClass('disabled').removeAttr('aria-disabled').click();
-                    Swal.fire('Patient info saved successfully!');
+                    Swal.fire('Patient info updated successfully!');
                 } else {
                     Swal.fire('Error saving patient info.');
                 }
@@ -52,24 +46,16 @@ $(document).ready(function () {
 
     // Save General Examination (Second Tab)
     $('#save-general-exam').click(function () {
-        if (!appointmentId) {
-            Swal.fire('Please complete the patient info in the first tab before proceeding.');
-            $('#nav-patient-tab').click();
-            return;
-        }
-
         let formData = $('#form-general-exam').serialize();
         $.ajax({
-            url: "/admin/save-general-exam",
+            url: $('#form-general-info').attr('action'),
             method: "POST",
             data: formData,
             success: function (response) {
                 $('.invalid-feedback').remove();
                 $('.is-invalid').removeClass('is-invalid');
                 if (response.success) {
-                    // Enable the next tab
-                    $('#nav-systemic-tab').removeClass('disabled').removeAttr('aria-disabled').click();
-                    Swal.fire('General examination saved successfully!');
+                    Swal.fire('General examination Updated successfully!');
                 } else {
                     Swal.fire('Error saving general examination.');
                 }
@@ -101,24 +87,16 @@ $(document).ready(function () {
 
 
     $('#save-systemic-exam').click(function () {
-        if (!appointmentId) {
-            Swal.fire('Please complete the patient info in the first tab before proceeding.');
-            $('#nav-patient-tab').click();
-            return;
-        }
-
         let formData = $('#form-systemic-exam').serialize();
         $.ajax({
-            url: "/admin/save-systemic-exam",
+            url: $('#form-systemic-info').attr('action'),
             method: "POST",
             data: formData,
             success: function (response) {
                 $('.invalid-feedback').remove();
                 $('.is-invalid').removeClass('is-invalid');
                 if (response.success) {
-                    // Enable the next tab
-                    $('#nav-history-tab').removeClass('disabled').removeAttr('aria-disabled').click();
-                    Swal.fire('Systemic examination saved successfully!');
+                    Swal.fire('Systemic examination updated successfully!');
                 } else {
                     Swal.fire('Error saving Systemic examination.');
                 }
@@ -149,24 +127,16 @@ $(document).ready(function () {
     });
 
     $('#save-history-exam').click(function () {
-        if (!appointmentId) {
-            alert('Please complete the patient info in the first tab before proceeding.');
-            $('#nav-patient-tab').click();
-            return;
-        }
-
         let formData = $('#form-history-exam').serialize();
         $.ajax({
-            url: "/admin/save-history-exam",
+            url: $('#form-history-info').attr('action'),
             method: "POST",
             data: formData,
             success: function (response) {
                 $('.invalid-feedback').remove();
                 $('.is-invalid').removeClass('is-invalid');
                 if (response.success) {
-                    // Enable the next tab
-                    $('#nav-complaint-tab').removeClass('disabled').removeAttr('aria-disabled').click();
-                    Swal.fire('Obstetric Histroy saved successfully!');
+                    Swal.fire('Obstetric Histroy updated successfully!');
                 } else {
                     Swal.fire('Error saving Obstetric Histroy.');
                 }
@@ -197,15 +167,10 @@ $(document).ready(function () {
     });
 
     $('#save-complaint-exam').click(function () {
-        if (!appointmentId) {
-            Swal.fire('Please complete the patient info in the first tab before proceeding.');
-            $('#nav-patient-tab').click();
-            return;
-        }
 
         let formData = $('#form-complaint-exam').serialize();
         $.ajax({
-            url: "/admin/save-complaint-exam",
+            url: $('#form-complaint-info').attr('action'),
             method: "POST",
             data: formData,
             success: function (response) {
@@ -214,7 +179,7 @@ $(document).ready(function () {
                 if (response.success) {
                     // Enable the next tab
                     // $('#nav-systemic-tab').removeClass('disabled').removeAttr('aria-disabled').click();
-                    Swal.fire('Presenting Complaint saved successfully!');
+                    Swal.fire('Presenting Complaint updated successfully!');
                     setTimeout(function () {
                         window.location.href = "/admin/appointments";
                     }, 5000);
@@ -245,11 +210,5 @@ $(document).ready(function () {
                 }
             }
         });
-    });
-
-    // Prevent disabled tabs from being clicked
-    $('.nav-link.disabled').click(function (e) {
-        e.preventDefault();
-        // alert('Please complete the previous step(s) first.');
     });
 });
