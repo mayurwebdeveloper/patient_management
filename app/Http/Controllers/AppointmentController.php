@@ -63,6 +63,18 @@ class AppointmentController extends Controller
                         $query->select('id', 'name');
                     }
                 ])->orderBy('opd_date', 'asc')->get();
+            }else if(Auth::user()->hasRole('Lab Technician')){
+                $appointments = Appointment::with([
+                    'patient' => function ($query) {
+                        $query->select('id', 'name');
+                    },
+                    'doctor' => function ($query) {
+                        $query->select('id', 'name');
+                    },
+                    'hospital' => function ($query) {
+                        $query->select('id', 'name');
+                    }
+                ])->orderBy('id', 'desc')->get();
             }else{
                 
             $doctorId = Auth::user()->id;
@@ -633,6 +645,14 @@ class AppointmentController extends Controller
         $appointment->update($validated);
 
         return response()->json(['success' => true]);
+    }
+
+    public function reportShow($appointmentId){
+        $getAppointmentReport = AppointmentReport::with([
+            'report' => function ($query) {
+                $query->select('id', 'report_name');
+            }])->where('appointment_id', $appointmentId)->get();
+        return view('reports.show',compact('getAppointmentReport'));
     }
 
 }

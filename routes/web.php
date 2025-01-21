@@ -101,6 +101,9 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
     Route::post('/treatment-sheet/{appointment}', [TreatmentSheetController::class, 'store'])->name('treatment-sheet.store')->middleware('permission:show treatment sheet');
     Route::get('/treatment-sheet/{id}/pdf', [TreatmentSheetController::class, 'generatePDF'])->name('treatment-sheet.pdf')->middleware('download treatment sheet');
 
+
+    //reportshow
+    Route::get('/report-show/{id}',[AppointmentController::class, 'reportShow'])->name('report-show');
     Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::get('/appointments/{id}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit');
     
