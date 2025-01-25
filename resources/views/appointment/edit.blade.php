@@ -50,7 +50,7 @@
                                 <select class="form-control @error('doctor_id') is-invalid @enderror" name="doctor_id" id="doctor_id" placeholder="Doctor">
                                     <option value="">Select</option>
                                     @foreach ($doctors as $key=> $doctor)
-                                        <option value="{{ $key }}" {{ $appointment->doctor_id == $doctor ? 'selected' : '' }}>{{ $doctor }}</option>
+                                        <option value="{{ $key }}" {{ $appointment->doctor_id == $key ? 'selected' : '' }}>{{ $doctor }}</option>
                                     @endforeach
                                 </select>
                                

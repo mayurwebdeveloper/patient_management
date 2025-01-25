@@ -104,6 +104,7 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
 
     //reportshow
     Route::get('/report-show/{id}',[AppointmentController::class, 'reportShow'])->name('report-show');
+    Route::post('/upload-report', [AppointmentController::class, 'uploadReportFile'])->name('upload.report.file');
     Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::get('/appointments/{id}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit');
     

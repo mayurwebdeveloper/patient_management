@@ -652,7 +652,42 @@ class AppointmentController extends Controller
             'report' => function ($query) {
                 $query->select('id', 'report_name');
             }])->where('appointment_id', $appointmentId)->get();
-        return view('reports.show',compact('getAppointmentReport'));
+        return view('reports.show',compact('getAppointmentReport','appointmentId'));
     }
+    public function uploadReportFile(Request $request)
+    {
+        $request->validate([
+            'files.*' => 'nullable|file|mimes:doc,docx,pdf,jpeg,jpg,png|max:2048', // Validate file types and size
+            'report_ids' => 'required|array',
+            'appointment_id' => 'required|integer',
+        ]);
+    
+        $appointmentId = $request->appointment_id;
+    
+        foreach ($request->report_ids as $index => $reportId) {
+            // Check if a file was uploaded for this report
+            if ($request->hasFile("files.$index")) {
+                $file = $request->file("files.$index");
+    
+                // Store the file in the public/upload directory
+                $reportsPath = 'images/reports';
+                if (!file_exists($reportsPath)) {
+                    mkdir($reportsPath, 0777, true);
+                }
 
+                $file_name = time() . mt_rand(1, 2000) . '.' . $file->extension();
+                $Folder = public_path($reportsPath);
+                $file->move($Folder, $file_name);
+    
+                // Update or create the record in the database
+                AppointmentReport::updateOrCreate(
+                    ['appointment_id' => $appointmentId, 'report_id' => $reportId],
+                    ['report_pdf' => $file_name]
+                );
+            }
+        }
+    
+
+        return redirect()->back()->with('success', 'Reports updated successfully!');
+    }
 }
