@@ -19,8 +19,7 @@ class PrescriptionController extends Controller
 {
     public function index()
     {
-        // Show all prescriptions (for a doctor, you can filter by doctor_id)
-        
+        // Show all prescriptions (for a doctor, you can filter by doctor_id
         if (Auth::user()->hasRole('Pharmacist')) {
             $pharmacist_id = Auth::user()->id;
             $prescriptions = Prescription::with('medicines', 'doctor', 'patient')->where(['pharmacist_id'=>$pharmacist_id])->get();
@@ -28,10 +27,34 @@ class PrescriptionController extends Controller
         }else{
             $prescriptions = Prescription::with('medicines', 'doctor', 'patient')->get();
         }
-
-        
         return view('prescriptions.index', compact('prescriptions'));
     }
+
+    public function returnmo()
+    {
+        // Show all prescriptions (for a doctor, you can filter by doctor_id
+        if (Auth::user()->hasRole('Doctor')) {
+            $doctor_id = Auth::user()->id;
+            $prescriptions = Prescription::with('medicines', 'doctor', 'patient')->where(['doctor_id'=>$doctor_id,'status'=>'returned'])->get();
+        }else{
+            $prescriptions = Prescription::with('medicines', 'doctor', 'patient')->get();
+        }
+        return view('prescriptions.index', compact('prescriptions'));
+    }
+
+    public function updatestatus(Request $request){
+        $prescription = Prescription::findOrFail($request->prescription_id);
+        $status = isset($request->status) ? $request->status : 'transferred';
+        if(isset($request->status)){
+            $arr['status'] = $status;
+        }
+        $prescription->update($arr);
+
+        return response()->json($prescription, 200); 
+    
+    }
+
+    
 
     public function create(Request $request)
     {
@@ -122,8 +145,10 @@ class PrescriptionController extends Controller
     $prescription = Prescription::with('medicines')->findOrFail($id);
     $doctors = User::role('Doctor')->get(); // Fetch doctors
     $patients = User::role('Patients')->get(); // Fetch patie+3nts
-
-    return view('prescriptions.edit', compact('prescription', 'doctors', 'patients'));
+    $pharmacist = User::role('Pharmacist')->get(); // Use role name for patients
+    $appointment = Appointment::where(['id'=>$prescription->appointment_id])->get();
+    $appointments = Appointment::all();
+    return view('prescriptions.edit', compact('prescription', 'doctors', 'patients','pharmacist','appointment','appointments'));
 }
 
 
@@ -140,11 +165,27 @@ public function update(Request $request, $id)
     ]);
 
     $prescription = Prescription::findOrFail($id);
-    $prescription->update([
+
+    $status = isset($request->status) ? $request->status : 'transferred';
+
+
+
+    $arr = [
         'doctor_id' => $request->doctor_id,
         'patient_id' => $request->patient_id,
         'notes' => $request->notes,
-    ]);
+    ];
+
+    if(isset($request->status)){
+        $arr['status'] = $status;
+    }
+    if(isset($request->pharma_comment) && $request->pharma_comment != ""){
+        $arr['pharma_comment'] = $request->pharma_comment;
+    }
+
+    
+
+    $prescription->update($arr);
 
     // Update the medicines
     $prescription->medicines()->delete();

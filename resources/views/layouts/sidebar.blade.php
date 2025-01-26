@@ -94,8 +94,13 @@
 
                          @can('view prescription')
                         <a class="collapse-item" href="{{ route('prescriptions.index') }}">Prescriptions</a>
-
                         @endcan
+
+                        @if(Auth::user()->hasRole('Doctor'))
+                        <a class="collapse-item" href="{{ route('prescription.returnmo') }}">Return Prescriptions</a>
+                        @endif
+
+                        
 
                         
                         

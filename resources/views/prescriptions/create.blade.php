@@ -56,7 +56,7 @@
         <div class="form-group">
         <div class="checkbox">
             <label>
-              <input type="checkbox" data-toggle="toggle" checked>
+              <input type="checkbox" name="status" data-toggle="toggle" checked>
               Transfer to Pharmasist
             </label>
           </div>

@@ -11,7 +11,7 @@ class SpecialityController extends Controller
     public function index()
     {
         // Fetch all specialities
-        $specialities = Speciality::pluck('title')->filter()->all();
+        $specialities = Speciality::select('id', 'title')->get();
     
         // Check if specialities exist
         if (empty($specialities)) {

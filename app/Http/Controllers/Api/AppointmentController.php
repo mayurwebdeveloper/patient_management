@@ -12,37 +12,97 @@ use App\Models\Speciality;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 use App\Models\Prescription;
-
+use Carbon\Carbon as CarbonDate;
 class AppointmentController extends Controller
 {
     public function store(Request $request)
     {
 
-        $user = $request->user();
+        // $user = $request->user();
+
+        // // Validate the incoming request data
+        // $validator = Validator::make($request->all(), [
+        //     // 'hospital_id' => 'required|integer',
+        //     // // 'department_id' => 'required|integer',
+        //     // 'doctor_id' => 'required|integer',
+        //     // 'date' => 'required|date',
+        //     // 'time_slot' => 'required|string',
+        //     // // 'title' => 'required|string|max:255',
+        //     // // 'description' => 'nullable|string',
+        //     // // 'token' => 'required|string',
+
+        //     'doctor_id' => 'required|integer',
+        //     'hospital_id' => 'required|integer',
+        //     'speciality_id' => 'required|integer',
+        //     'opd_number' => 'nullable|string|max:255',
+        //     'patient_name' => 'nullable|string|max:255',
+        //     'age' => 'nullable|string|max:10',
+        //     'age_month' => 'nullable|string|max:10',
+        //     'mobile_number' => 'nullable|string|max:15',
+        //     'sex' => 'nullable|string|max:15',
+        //     'village' => 'nullable|string|max:50',
+        //     'taluka' => 'nullable|string|max:50',
+        //     'opd_date' => 'nullable|date'
+
+
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'errors' => $validator->errors(),
+        //     ], 422);
+        // }
+        // // $appointment->user_id = $user->id; // Add the authenticated user's ID
+
+        // // // Store the appointment data
+        // // $appointment = new Appointment();
+        // // $appointment->patient_id = $user->id;
+        // // $appointment->hospital_id = $request->hospital_id;
+        // // $appointment->speciality_id = $request->department_id; // Assuming department_id maps to speciality_id
+        // // $appointment->doctor_id = $request->doctor_id;
+        // // $appointment->date = $request->date;
+        // // $appointment->time_slot = $request->time_slot;
+        // // $appointment->title = $request->title;
+        // // $appointment->description = $request->description;
+        // // $appointment->status = 'scheduled'; // or any default status you prefer
+        // // $appointment->save();
+
+        // $validatedData['appointment_date'] = CarbonDate::createFromFormat('Y-m-d', $request->opd_date)->format('Y-m-d');
+
+        // $validatedData['opd_date'] =  CarbonDate::createFromFormat('Y-m-d', $request->opd_date)->format('Y-m-d');
+        // // $validatedData['opd_date'] = $request->opd_number;
+        // // Create a new appointment record
+        // $appointment = Appointment::create($validatedData);
+
+        // return response()->json([
+        //     'status' => true,
+        //     'data' => $appointment,
+        // ], 201);
+        
+         $user = $request->user();
 
         // Validate the incoming request data
         $validator = Validator::make($request->all(), [
-            // 'hospital_id' => 'required|integer',
-            // // 'department_id' => 'required|integer',
-            // 'doctor_id' => 'required|integer',
-            // 'date' => 'required|date',
-            // 'time_slot' => 'required|string',
-            // // 'title' => 'required|string|max:255',
-            // // 'description' => 'nullable|string',
-            // // 'token' => 'required|string',
+          
+            'patient_id' => 'required',
+            'doctor_id' => 'required',
+            'hospital_id' => 'required',
+            'speciality_id' => 'required|exists:specialities,id',
 
-            'doctor_id' => 'required|integer',
-            'hospital_id' => 'required|integer',
-            'speciality_id' => 'required|integer',
-            'opd_number' => 'nullable|string|max:255',
-            'patient_name' => 'nullable|string|max:255',
-            'age' => 'nullable|string|max:10',
-            'age_month' => 'nullable|string|max:10',
-            'mobile_number' => 'nullable|string|max:15',
-            'sex' => 'nullable|string|max:15',
-            'village' => 'nullable|string|max:50',
-            'taluka' => 'nullable|string|max:50',
-            'opd_date' => 'nullable|date'
+            'department_id'=>'nullable',
+            'opd_number' => 'nullable|max:255',
+            'patient_name' => 'nullable|max:255',
+            'age' => 'nullable|max:10',
+            'age_month' => 'nullable|max:10',
+            'mobile_number' => 'nullable|max:15',
+            'sex' => 'nullable|max:15',
+            'village' => 'nullable|max:50',
+            'taluka' => 'nullable|max:50',
+            'opd_date' => 'nullable|date',
+            'date'=> 'nullable|date',
+            'time_slot'=>'nullable',
+            'title'=>'nullable',
 
 
         ]);
@@ -53,6 +113,13 @@ class AppointmentController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
+
+        $validatedData = $validator->validated();
+
+        // echo "<pre>";
+        // print_r($validatedData);
+        // exit;
+
         // $appointment->user_id = $user->id; // Add the authenticated user's ID
 
         // // Store the appointment data
@@ -68,9 +135,35 @@ class AppointmentController extends Controller
         // $appointment->status = 'scheduled'; // or any default status you prefer
         // $appointment->save();
 
-        $validatedData['appointment_date'] = CarbonDate::createFromFormat('Y-m-d', $request->opd_date)->format('Y-m-d');
+        $validatedData['appointment_date'] = CarbonDate::createFromFormat('Y-m-d', $validatedData['opd_date'])->format('Y-m-d');
 
-        $validatedData['opd_date'] =  CarbonDate::createFromFormat('Y-m-d', $request->opd_date)->format('Y-m-d');
+        if (!empty($validatedData['opd_date'])) {
+            $validatedData['opd_date'] = CarbonDate::createFromFormat('Y-m-d', $validatedData['opd_date'])->format('Y-m-d');
+        }
+    
+        // Create a new appointment record
+        $appointment = Appointment::create([
+            'patient_id' => $validatedData['patient_id'],
+            'hospital_id' => $validatedData['hospital_id'],
+            'department_id' => $validatedData['department_id'],
+            'doctor_id' => $validatedData['doctor_id'],
+            'date' => $validatedData['date'],
+            'time_slot' => $validatedData['time_slot'],
+            'title' => $validatedData['title'],
+            'description' => $validatedData['description'] ?? null,
+            'speciality_id' => $validatedData['speciality_id'] ?? null,
+            'opd_number' => $validatedData['opd_number'] ?? null,
+            'patient_name' => $validatedData['patient_name'] ?? null,
+            'age' => $validatedData['age'] ?? null,
+            'age_month' => $validatedData['age_month'] ?? null,
+            'mobile_number' => $validatedData['mobile_number'] ?? null,
+            'sex' => $validatedData['sex'] ?? null,
+            'village' => $validatedData['village'] ?? null,
+            'taluka' => $validatedData['taluka'] ?? null,
+            'opd_date' => $validatedData['opd_date'] ?? null,
+            'appointment_date' => $validatedData['appointment_date'] ?? null,
+        ]);
+    
         // $validatedData['opd_date'] = $request->opd_number;
         // Create a new appointment record
         $appointment = Appointment::create($validatedData);
@@ -79,6 +172,7 @@ class AppointmentController extends Controller
             'status' => true,
             'data' => $appointment,
         ], 201);
+        
     }
 
     public function update(Request $request, $id)

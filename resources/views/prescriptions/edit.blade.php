@@ -15,6 +15,19 @@
         @csrf
         @method('PUT')
 
+        <!-- Appointment Dropdown -->
+        <div class="form-group">
+            <label for="appointment_id">Select Appointment</label>
+            <select name="appointment_id" id="appointment_id" class="form-control" required>
+                <option value="">-- Select Appointment --</option>
+                @foreach($appointments as $appointment)
+                    <option value="{{ $appointment->id }}"  {{ $appointment->id == $prescription->appointment_id ? 'selected' : '' }}  >
+                        Appointment with {{ $prescription->appointment_id }} {{ @$appointment->patient->name == "" ? $appointment->patient_name : @$appointment->patient->name }} on {{ $appointment->opd_date }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
         <!-- Doctor Dropdown -->
         <div class="form-group">
             <label for="doctor_id">Doctor</label>
@@ -38,6 +51,43 @@
                 @endforeach
             </select>
         </div>
+
+        @if(Auth::user()->hasRole('Doctor'))
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="status" value="transferred" data-toggle="toggle" checked>
+                  Transfer to Pharmasist
+                </label>
+              </div>
+              <select name="pharmacist_id" id="pharmacist_id" class="form-control">
+                <option value="">-- Select Pharmasist --</option>
+                    @foreach($pharmacist as $pharm)
+                        <option value="{{ $pharm->id }}"  {{ $pharm->id == $prescription->pharmacist_id ? 'selected' : '' }} >{{ $pharm->name }}</option>
+                    @endforeach
+                </select>
+        </div>
+        @endif
+
+        @if(Auth::user()->hasRole('Pharmacist'))
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="status" {{ $prescription->status == "returned" ? 'checked' : '' }}  value="returned"   data-toggle="toggle">
+                  Return to MO
+                </label>
+              </div>
+        </div>
+        @endif
+
+        @if(Auth::user()->hasRole('Pharmacist'))
+        <!-- Notes -->
+        <div class="form-group">
+            <label for="pharma_comment">Notes To MO</label>
+            <textarea name="pharma_comment" class="form-control">{{ $prescription->pharma_comment }}</textarea>
+        </div>
+        @endif
+
 
         <!-- Notes -->
         <div class="form-group">

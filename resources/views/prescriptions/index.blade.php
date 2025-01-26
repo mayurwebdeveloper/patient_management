@@ -34,7 +34,19 @@
 @section('main-section')
 <!-- Custom styles for this page -->
 <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
-
+<div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">Notification</strong>
+        <small>Just now</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        This is a toast message!
+      </div>
+    </div>
+  </div>
+  
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
@@ -51,6 +63,7 @@
                     <th>ID</th>
                     <th>Doctor</th>
                     <th>Patient</th>
+                    <th>Status</th>
                     <th>Notes</th>
                     <th>Medicines</th>
                     <th>Actions</th>
@@ -62,7 +75,12 @@
                         <td>{{ $prescription->id }}</td>
                         <td> {{ $prescription->doctor->name }}</td>
                         <td>{{ $prescription->patient->name }}</td>
-                        <td>{{ $prescription->notes }}</td>
+                        <td>{{ $prescription->status }}</td>
+                        <td>{{ $prescription->notes }}
+                            @if($prescription->pharma_comment != "")
+                               <br> <b>Pharma Comment:</b> {{ $prescription->pharma_comment }}
+                            @endif
+                        </td>
                         <td>
                          <ul>
                             @foreach($prescription->medicines as $medicine)
@@ -82,6 +100,9 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this prescription?');">Delete</button>
                             </form>
+                            @if($prescription->status != "completed")
+                            <a data-id="{{ $prescription->id }}" id="pres-{{ $prescription->id }}" class="complete_prescription btn btn-primary btn-sm">Complete</a>
+                            @endif
                         </td>
 
                         
@@ -100,6 +121,41 @@
 <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
+<script>
+$(document).on('click','.complete_prescription',function(){
+    alert($(this).data('id'))
+    var formData = {
+        prescription_id: $(this).data('id'),
+        status:'completed'
+    };
+    const csrfToken = $('meta[name="csrf-token"]').attr("content");
+    var pres = $(this).data('id');
+    $.ajax({
+        url: "{{ route('prescription.updatestatus') }}", // The PHP script to handle the request
+        type: "POST",
+        data: formData,
+        headers: {
+            "X-CSRF-TOKEN": csrfToken, // Add CSRF token to request headers
+        },
+        success: function (response) {
+            // Display the response
+            Swal.fire(
+                'Prescription',
+                'Prescription updated successfully!',
+                'success'
+                );
+       
+                $("#pres-"+pres).hide();
+        },
+        error: function (xhr, status, error) {
+            console.error("Error: " + error);
+            $("#response").html("An error occurred.");
+        },
+    });
+})
+    
+
+</script>
 
 @if (Session::has('success'))
 <script>

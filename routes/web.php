@@ -61,6 +61,11 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
     
     Route::resource('prescriptions', PrescriptionController::class);
     Route::get('/prescription/{id}/pdf', [PrescriptionController::class, 'generatePDF'])->name('prescription.pdf');
+    Route::get('/returnprescription/', [PrescriptionController::class, 'returnmo'])->name('prescription.returnmo');
+
+    Route::post('/updatestatus/', [PrescriptionController::class, 'updatestatus'])->name('prescription.updatestatus');
+
+    // Route::get('/prescription/{id}/pdf', [PrescriptionController::class, 'generatePDF'])->name('prescription.pdf');
 
     // Route::delete('/prescriptions/{id}', [PrescriptionController::class, 'destroy'])->name('prescriptions.destroy');
 

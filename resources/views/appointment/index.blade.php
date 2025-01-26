@@ -134,7 +134,7 @@
                           
                             <a href="{{ route('appointment.followup', ['appointment' => $appointment->id]) }}" class="btn btn-sm btn-primary">Followup</a>
 
-                            <a href="{{ route('prescriptions.create', ['appointment' => $appointment->id]) }}" class="btn btn-sm btn-primary">Presecription</a>
+                            <a href="{{ route('prescriptions.create', ['appointment' => $appointment->id]) }}" class="btn btn-sm btn-primary">New Presecription</a>
 
                             <button 
                                 type="button" 
