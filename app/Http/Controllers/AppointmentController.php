@@ -544,6 +544,8 @@ class AppointmentController extends Controller
     {
         $validated = $request->validate([
             'opd_number' => 'required',
+            'patient_id' => 'required',
+            'doctor_id' => 'required',
             'age' => 'nullable|integer|min:0',
             'age_month' => 'nullable|integer|min:0',
             'village' => 'nullable|string|max:255',
