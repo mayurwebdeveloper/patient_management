@@ -17,521 +17,544 @@
 
 
         <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-              <button class="nav-link active" id="nav-home-tab" data-coreui-toggle="tab" data-coreui-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Home</button>
+            <div class="nav nav-tabs appointmentTab" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-patient-tab" data-toggle="tab" data-target="#nav-patient" type="button" role="tab" aria-controls="nav-patient" aria-selected="true">Patient Info</button>
+                <button class="nav-link" id="nav-general-tab" data-toggle="tab" data-target="#nav-general" type="button" role="tab" aria-controls="nav-general" aria-selected="false">General Examination</button>
+                <button class="nav-link" id="nav-systemic-tab" data-toggle="tab" data-target="#nav-systemic" type="button" role="tab" aria-controls="nav-systemic" aria-selected="false">Systemic Examination</button>
+                <button class="nav-link" id="nav-history-tab" data-toggle="tab" data-target="#nav-history" type="button" role="tab" aria-controls="nav-history" aria-selected="false">Obstetric History</button>
+                <button class="nav-link" id="nav-complaint-tab" data-toggle="tab" data-target="#nav-complaint" type="button" role="tab" aria-controls="nav-complaint" aria-selected="false">Presenting Complaint</button>
             </div>
-          </nav>
-
-          <div class="tab-content" id="nav-tabContent">
-
-            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
-                
-        <form method="post" action="{{ route('appointments.moupdate', $appointment->id) }}" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
-
-            <div class="form-row">
-
-            <div class="form-group col-md-3">
-                <label for="appointment_status">Appointment Status</label>
-                <select name="appointment_status" id="appointment_status" class="form-control">
-                    <option value="">Select Status</option>
-                    <option value="confirmed" {{ $appointment->status == "confirmed" ? 'selected' : '' }}>Confirmed</option>
-                    <option value="pending"  {{ $appointment->status == "pending" ? 'selected' : '' }}>Pending</option>
-                    <option value="cancelled"  {{ $appointment->status == "cancelled" ? 'selected' : '' }}>Cancelled</option>
-                    <option value="scheduled"  {{ $appointment->status == "scheduled" ? 'selected' : '' }}>Scheduled</option>
-                </select>
-            </div>
-
-            <div class="form-group col-md-3">
-                <label for="provisional">Provisional</label>
-                <input type="text" name="provisional" id="provisional" class="form-control" value="{{ $appointment->provisional }}">
-                @error('provisional')
-                <div class="invalid-feedback">
-                {{$message}}
-                </div>
-                @enderror
-            </div>
-
-            <div class="form-group col-md-3">
-                <label for="doctor_id">Doctor</label>
-                <select name="doctor_id" id="doctor_id" class="form-control">
-                    @foreach ($doctors as $key => $doctor)
-                        <option value="{{ $key }}" {{ $appointment->doctor_id == $key ? 'selected' : '' }} >
-                            {{ $doctor }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="form-group col-md-3">
-                <label for="hospital_id">Hospital</label>
-            <select name="hospital_id" id="hospital_id" class="form-control">
-                @foreach ($hospitals as $key => $hospital)
-                    <option value="{{ $key }}" {{ $appointment->hospital_id == $key ? 'selected' : '' }} >
-                        {{ $hospital }}
-                    </option>
-                @endforeach
-            </select>
-            </div>
-
-            <div class="form-group col-md-3">
-                <label for="patient_id">Patient</label>
-              
-
-                <select  required class="form-control" name="patient_id" id="patient_id" placeholder="patient_id">
-                    @foreach ($patients as $key => $patient)
-                        <option value="{{ $key }}" {{ $appointment->patient_id == $key ? 'selected' : '' }}>{{ $patient }}</option>
-                    @endforeach
-                </select>
-                @error('patient_id')
-                <div class="invalid-feedback">
-                {{$message}}
-                </div>
-                @enderror
-            </div>
-
-            <div class="form-group col-md-3">
-                <label for="speciality_id">Speciality</label>
-                <select name="speciality_id" id="speciality_id" class="form-control">
-                    @foreach ($specialities as $key => $speciality)
-                        <option value="{{ $key }}" {{ $appointment->speciality_id == $key ? 'selected' : '' }}>
-                            {{ $speciality }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="form-group col-md-3">
-                <label for="opd_number">OPD Number</label>
-                 <input type="text" name="opd_number" id="opd_number" class="form-control" value="{{ $appointment->opd_number }}">
-            </div>
-
-
-            <div class="form-group col-md-3">
-                <label for="age">Age</label>
-                <input type="text" name="age" id="age" class="form-control" value="{{ $appointment->age }}">
-            </div>
-            <div class="form-group col-md-3">
-                <label for="mobile_number">Mobile Number</label>
-                <input type="text" name="mobile_number" id="mobile_number" class="form-control" value="{{ $appointment->mobile_number }}">
-            </div>
+        </nav>
+        
+        <div class="tab-content" id="nav-tabContent">
+            <!-- Patient Info Tab -->
             
+                <div class="tab-pane fade show active" id="nav-patient" role="tabpanel" aria-labelledby="nav-patient-tab">
+                    <form method="post" id="form-patient-info" name="form-patient-info" action="{{ route('update-patient-info', $appointment->id) }}" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="patient_id">Patient</label>
+                            
 
-            <div class="form-group col-md-3">
-                <label for="opd_date">OPD date</label>
-                <input type="date" class="form-control @error('opd_date') is-invalid @enderror" name="opd_date" id="opd_date" value="{{ $appointment->opd_date }}" placeholder="OPD Date">
-                @error('opd_date')
-                <div class="invalid-feedback">
-                {{$message}}
+                                <select  class="form-control @error('patient_id') is-invalid @enderror" name="patient_id" id="patient_id" placeholder="patient_id">
+                                    <option value="">Select</option>
+                                    @foreach ($patients as $k => $patient)
+                                        <option value="{{ $k }}" {{ $appointment->patient_id == $k ? 'selected' : '' }}>{{ $patient }}</option>
+                                    @endforeach
+                                </select>
+                               
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="sector">Doctor</label>
+                                <select class="form-control @error('doctor_id') is-invalid @enderror" name="doctor_id" id="doctor_id" placeholder="Doctor">
+                                    <option value="">Select</option>
+                                    @foreach ($doctors as $key=> $doctor)
+                                        <option value="{{ $key }}" {{ $appointment->doctor_id == $key ? 'selected' : '' }}>{{ $doctor }}</option>
+                                    @endforeach
+                                </select>
+                               
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="speciality_id">Specialities.</label>
+                                <select  required class="form-control @error('speciality_id') is-invalid @enderror" name="speciality_id" id="speciality_id" placeholder="speciality_id">
+                                    <option value="">Select</option>
+                                    @foreach ($specialities as $key => $speciality)
+                                        <option value="{{ $key }}" {{ $appointment->speciality_id == $key ? 'selected' : '' }}>{{ $speciality }}</option>
+                                    @endforeach
+                                </select>
+                               
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="hospital_id">Hospital</label>
+                                <select  required class="form-control @error('hospital_id') is-invalid @enderror" name="hospital_id" id="hospital_id" placeholder="hospital_id">
+                                    <option value="">Select</option>
+                                    @foreach ($hospitals as $key => $hospital_id)
+                                        <option value="{{ $key }}" {{ $appointment->hospital_id == $key ? 'selected' : '' }}>{{ $hospital_id }}</option>
+                                    @endforeach
+                                </select>
+                               
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="opd_number">OPD Number.</label>
+                                <input type="text" class="form-control @error('opd_number') is-invalid @enderror" name="opd_number" id="opd_number" value="{{$appointment->opd_number}}" placeholder="OPD Number">
+                                @error('opd_number')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="age">Age.</label>
+                                <input type="text" class="form-control @error('age') is-invalid @enderror" name="age" id="age" value="{{$appointment->age}}" placeholder="Age">
+                                @error('age')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="age_month">Age Month.</label>
+                                <input type="text" class="form-control @error('age_month') is-invalid @enderror" name="age_month" id="age_month" value="{{$appointment->age_month}}" placeholder="Age Month">
+                                @error('age_month')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="village">Village</label>
+                                <input type="text" class="form-control @error('village') is-invalid @enderror" name="village" id="village" value="{{$appointment->village}}" placeholder="Village">
+                                @error('village')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="taluka">Taluka</label>
+                                <input type="text" class="form-control @error('taluka') is-invalid @enderror" name="taluka" id="taluka" value="{{$appointment->taluka}}" placeholder="Taluka">
+                                @error('taluka')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="sex">Sex</label>
+                                <input type="text" class="form-control @error('sex') is-invalid @enderror" name="sex" id="sex" value="{{$appointment->sex}}" placeholder="Sex">
+                                @error('sex')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="mobile_number">Mobile</label>
+                                <input type="text" class="form-control @error('mobile_number') is-invalid @enderror" name="mobile_number" id="mobile_number" value="{{$appointment->mobile_number}}" placeholder="Mobile">
+                                @error('mobile_number')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="opd_date">OPD date</label>
+                                <input type="date" class="form-control @error('opd_date') is-invalid @enderror" name="opd_date" id="opd_date" value="{{$appointment->opd_date}}" placeholder="OPD Date">
+                                @error('opd_date')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+
+                            <div class="form-group col-md-3">
+                                <label for="ipd_date">IPD Date</label>
+                                <input type="date" class="form-control @error('ipd_date') is-invalid @enderror" name="ipd_date" id="ipd_date" value="{{$appointment->ipd_date}}" placeholder="IPD Date">
+                                @error('ipd_date')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="lpd_no">LPD number</label>
+                                <input type="text" class="form-control @error('lpd_no') is-invalid @enderror" name="lpd_no" id="lpd_no" value="{{$appointment->lpd_no}}" placeholder="LPD No">
+                                @error('lpd_no')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="status">Appointment Status</label>
+                                <select name="status" id="status" class="form-control">
+                                    <option value="confirmed" {{ $appointment->status == "confirmed" ? 'selected' : '' }}>Confirmed</option>
+                                    <option value="pending"  {{ $appointment->status == "pending" ? 'selected' : '' }}>Pending</option>
+                                    <option value="cancelled"  {{ $appointment->status == "cancelled" ? 'selected' : '' }}>Cancelled</option>
+                                    <option value="scheduled"  {{ $appointment->status == "scheduled" ? 'selected' : '' }}>Scheduled</option>
+                                </select>
+                            </div>
+
+                            
+
+                        </div>
+                        <button type="button" id="save-patient-info" class="btn btn-primary">Save</button>
+                    </form>           
                 </div>
-                @enderror
-            </div>
+
+                <!-- General Examination Tab -->
+                <div class="tab-pane fade" id="nav-general" role="tabpanel" aria-labelledby="nav-general-tab">
+                    <form id="form-general-exam" method="post" action="{{ route('update-general-exam', $appointment->id) }}" enctype="multipart/form-data">
+                        @csrf
+                       
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="provisional">Provisional</label>
+                                <input type="text" name="provisional" id="provisional" class="form-control" value="{{ $appointment->provisional }}">
+                                @error('provisional')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="weight">Weight (KG)</label>
+                                <input type="text" name="weight" id="weight" class="form-control" value="{{ $appointment->weight }}">
+                                @error('weight')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="height">Height (CM)</label>
+                                <input type="text" name="height" id="height" class="form-control" value="{{ $appointment->height }}">
+                                @error('height')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="temprature">Temprature (CM)</label>
+                                <input type="text" name="temprature" id="temprature" class="form-control" value="{{ $appointment->temprature }}">
+                                @error('temprature')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="pulse">Pulse (/Min)</label>
+                                <input type="text" name="pulse" id="pulse" class="form-control" value="{{ $appointment->pulse }}">
+                                @error('pulse')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="bp">BP (mm OR Hg)</label>
+                                <input type="text" name="bp" id="bp" class="form-control" value="{{ $appointment->bp }}">
+                                @error('bp')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="spo2">SPO2</label>
+                                <input type="text" name="spo2" id="spo2" class="form-control" value="{{ $appointment->spo2 }}">
+                                @error('spo2')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="rr">RR</label>
+                                <input type="text" name="rr" id="rr" class="form-control" value="{{ $appointment->rr }}">
+                                @error('rr')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="paller">Paller</label>
+                                <input type="text" name="paller" id="paller" class="form-control" value="{{ $appointment->paller }}">
+                                @error('paller')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="clubbing">Clubbing</label>
+                                <input type="text" name="clubbing" id="clubbing" class="form-control" value="{{ $appointment->clubbing }}">
+                                @error('clubbing')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="cyanosis">Cyanosis</label>
+                                <input type="text" name="cyanosis" id="cyanosis" class="form-control" value="{{ $appointment->cyanosis }}">
+                                @error('cyanosis')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="oedema">Oedema</label>
+                                <input type="text" name="oedema" id="oedema" class="form-control" value="{{ $appointment->oedema }}">
+                                @error('oedema')
+                                <div class="invalid-feedback">
+                                {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+
+
+                        </div>
+                        <button type="button" id="save-general-exam" class="btn btn-primary">Save</button>
+                    </form>   
+                </div>
+
+                <!-- Systemic Examination Tab -->
+                <div class="tab-pane fade" id="nav-systemic" role="tabpanel" aria-labelledby="nav-systemic-tab">
+                    <form id="form-systemic-exam" method="post" action="{{ route('update-systemic-exam', $appointment->id) }}" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="RS">RS</label>
+                                <input type="text" name="RS" id="RS" class="form-control" value="{{ $appointment->RS }}">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="cvs">CVS</label>
+                                <input type="text" name="CVS" id="CVS" class="form-control" value="{{ $appointment->CVS }}">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="CNS">CNS</label>
+                                <input type="text" name="CNS" id="CNS" class="form-control" value="{{ $appointment->CNS }}">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="PA">PA</label>
+                                <input type="text" name="PA" id="PA" class="form-control" value="{{ $appointment->PA }}">
+                            </div>
+                        </div>
+                        <button type="button" id="save-systemic-exam" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+
+                <!-- Obstetric History Tab -->
+                <div class="tab-pane fade" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">
+                    <form id="form-history-exam" method="post" action="{{ route('update-history-exam', $appointment->id) }}" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="LMP">LMP</label>
+                                <input type="date" name="LMP" id="LMP" class="form-control" value="{{ $appointment->LMP }}">
+                                @error('LMP')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="G">G</label>
+                                <input type="text" name="G" id="G" class="form-control" value="{{ $appointment->G }}">
+                                @error('G')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="P">P</label>
+                                <input type="text" name="P" id="P" class="form-control" value="{{ $appointment->P }}">
+                                @error('P')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="L">L</label>
+                                <input type="text" name="L" id="L" class="form-control" value="{{ $appointment->L }}">
+                                @error('L')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="A">A</label>
+                                <input type="text" name="A" id="A" class="form-control" value="{{ $appointment->A }}">
+                                @error('A')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="age_of_last_child">Age of Last Child</label>
+                                <input type="text" name="age_of_last_child" id="age_of_last_child" class="form-control" value="{{ $appointment->age_of_last_child }}">
+                                @error('age_of_last_child')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="type_of_last_delivery">Type of Last Delivery</label>
+                                <input type="text" name="type_of_last_delivery" id="type_of_last_delivery" class="form-control" value="{{ $appointment->type_of_last_delivery }}">
+                                @error('type_of_last_delivery')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="personal_ho">Personal H/O</label>
+                                <textarea name="personal_ho" id="personal_ho" class="form-control">{{ $appointment->personal_ho }}</textarea>
+                                @error('personal_ho')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="past_ho">Past H/O</label>
+                                <textarea name="past_ho" id="past_ho" class="form-control">{{ $appointment->past_ho }}</textarea>
+                                @error('past_ho')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <button type="button" id="save-history-exam" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="nav-complaint" role="tabpanel" aria-labelledby="nav-complaint-tab">
+                    <form id="form-complaint-exam" method="post" action="{{ route('update-complaint-exam', $appointment->id) }}" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="chief_complaint">Chief Complaint</label>
+                                <textarea name="chief_complaint" id="chief_complaint" class="form-control">{{ $appointment->chief_complaint }}</textarea>
+                                @error('chief_complaint')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="past_history">Past History</label>
+                                <textarea name="past_history" id="past_history" class="form-control">{{ $appointment->past_history }}</textarea>
+                                @error('past_history')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="family_history">Family History</label>
+                                <textarea name="family_history" id="family_history" class="form-control">{{ $appointment->family_history }}</textarea>
+                                @error('family_history')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="vitals_general_examination">Vitals / General Examination</label>
+                                <textarea name="vitals_general_examination" id="vitals_general_examination" class="form-control">{{ $appointment->vitals_general_examination }}</textarea>
+                                @error('vitals_general_examination')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="personal_history">Personal History</label>
+                                <textarea name="personal_history" id="personal_history" class="form-control">{{ $appointment->personal_history }}</textarea>
+                                @error('personal_history')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="allergic_history">Allergic History</label>
+                                <textarea name="allergic_history" id="allergic_history" class="form-control">{{ $appointment->allergic_history }}</textarea>
+                                @error('allergic_history')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="obstetric_history">Obstetric History</label>
+                                <textarea name="obstetric_history" id="obstetric_history" class="form-control">{{ $appointment->obstetric_history }}</textarea>
+                                @error('obstetric_history')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="treatment">Treatment</label>
+                                <textarea name="treatment" id="treatment" class="form-control">{{ $appointment->treatment }}</textarea>
+                                @error('treatment')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
+                            <div class="form-group col-md-3">
+                                <label for="remarks">Remarks</label>
+                                <textarea name="remarks" id="remarks" class="form-control">{{ $appointment->remarks }}</textarea>
+                                @error('remarks')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                            
             
-            <div class="form-group col-md-3">
-                <label for="ipd_date">IPD Date</label>
-                <input type="date" class="form-control @error('ipd_date') is-invalid @enderror" name="ipd_date" id="ipd_date" value="{{ $appointment->ipd_date }}" placeholder="IPD Date">
-                @error('ipd_date')
-                <div class="invalid-feedback">
-                {{$message}}
+                        </div>
+                        <button type="button" id="save-complaint-exam" class="btn btn-primary">Save</button>
+                    </form>
                 </div>
-                @enderror
-            </div>
 
-
-            <div class="form-group col-md-3">
-                <label for="lpd_no">LPD number</label>
-                <input type="text" class="form-control @error('lpd_no') is-invalid @enderror" name="lpd_no" id="lpd_no" value="{{ $appointment->lpd_no }}" placeholder="LPD No">
-                @error('lpd_no')
-                <div class="invalid-feedback">
-                {{$message}}
-                </div>
-                @enderror
-            </div>
-
-            
-
-            </div>
-
-
-            
-            <div class="form-row">
-
-                <h4> General Examination </h4>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-3">
-                    <label for="provisional">Provisional</label>
-                    <input type="text" name="provisional" id="provisional" class="form-control" value="{{ $appointment->provisional }}">
-                    @error('provisional')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
                 
-                <div class="form-group col-md-3">
-                    <label for="weight">Weight (KG)</label>
-                    <input type="text" name="weight" id="weight" class="form-control" value="{{ $appointment->weight }}">
-                    @error('weight')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-
-                <div class="form-group col-md-3">
-                    <label for="height">Height (CM)</label>
-                    <input type="text" name="height" id="height" class="form-control" value="{{ $appointment->height }}">
-                    @error('height')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-
-                <div class="form-group col-md-3">
-                    <label for="temperature">temperature (CM)</label>
-                    <input type="text" name="temperature" id="temperature" class="form-control" value="{{ $appointment->temperature }}">
-                    @error('temprature')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-
-                <div class="form-group col-md-3">
-                    <label for="pulse">Pulse (/Min)</label>
-                    <input type="text" name="pulse" id="pulse" class="form-control" value="{{ $appointment->pulse }}">
-                    @error('pulse')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-
-                <div class="form-group col-md-3">
-                    <label for="bp">BP (mm OR Hg)</label>
-                    <input type="text" name="bp" id="bp" class="form-control" value="{{ $appointment->bp }}">
-                    @error('bp')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-
-                <div class="form-group col-md-3">
-                    <label for="spo2">SPO2</label>
-                    <input type="text" name="spo2" id="spo2" class="form-control" value="{{ $appointment->spo2 }}">
-                    @error('spo2')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-
-                <div class="form-group col-md-3">
-                    <label for="rr">RR</label>
-                    <input type="text" name="rr" id="rr" class="form-control" value="{{ $appointment->rr }}">
-                    @error('rr')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-
-                <div class="form-group col-md-3">
-                    <label for="paller">Paller</label>
-                    <input type="text" name="paller" id="paller" class="form-control" value="{{ $appointment->paller }}">
-                    @error('paller')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-
-                <div class="form-group col-md-3">
-                    <label for="clubbing">Clubbing</label>
-                    <input type="text" name="clubbing" id="clubbing" class="form-control" value="{{ $appointment->clubbing }}">
-                    @error('clubbing')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-
-                <div class="form-group col-md-3">
-                    <label for="cyanosis">Cyanosis</label>
-                    <input type="text" name="cyanosis" id="cyanosis" class="form-control" value="{{ $appointment->cyanosis }}">
-                    @error('cyanosis')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-
-                <div class="form-group col-md-3">
-                    <label for="oedema">Oedema</label>
-                    <input type="text" name="oedema" id="oedema" class="form-control" value="{{ $appointment->oedema }}">
-                    @error('oedema')
-                    <div class="invalid-feedback">
-                    {{$message}}
-                    </div>
-                    @enderror
-                </div>
-
-
-            </div>
-            <div class="form-row">
-
-                <h4>Systemic Examination</h4>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-3">
-                    <label for="RS">RS</label>
-                    <input type="text" name="RS" id="RS" class="form-control" value="{{ $appointment->RS }}">
-                    @error('RS')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="CVS">CVS</label>
-                    <input type="text" name="CVS" id="CVS" class="form-control" value="{{ $appointment->CVS }}">
-                    @error('CVS')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="CNS">CNS</label>
-                    <input type="text" name="CNS" id="CNS" class="form-control" value="{{ $appointment->CNS }}">
-                    @error('CNS')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="PA">P/A</label>
-                    <input type="text" name="PA" id="PA" class="form-control" value="{{ $appointment->PA }}">
-                    @error('PA')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-            </div>
-            <div class="form-row">
-
-                <h4>Obestetric History</h4>
-            </div>
-            <div class="form-row">
-              <div class="form-group col-md-3">
-                    <label for="LMP">LMP</label>
-                    <input type="date" name="LMP" id="LMP" class="form-control" value="{{ $appointment->LMP }}">
-                    @error('LMP')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="G">G</label>
-                    <input type="text" name="G" id="G" class="form-control" value="{{ $appointment->G }}">
-                    @error('G')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="P">P</label>
-                    <input type="text" name="P" id="P" class="form-control" value="{{ $appointment->P }}">
-                    @error('P')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="L">L</label>
-                    <input type="text" name="L" id="L" class="form-control" value="{{ $appointment->L }}">
-                    @error('L')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="A">A</label>
-                    <input type="text" name="A" id="A" class="form-control" value="{{ $appointment->A }}">
-                    @error('A')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="age_of_last_child">Age of Last Child</label>
-                    <input type="text" name="age_of_last_child" id="age_of_last_child" class="form-control" value="{{ $appointment->age_of_last_child }}">
-                    @error('age_of_last_child')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="type_of_last_delivery">Type of Last Delivery</label>
-                    <input type="text" name="type_of_last_delivery" id="type_of_last_delivery" class="form-control" value="{{ $appointment->type_of_last_delivery }}">
-                    @error('type_of_last_delivery')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="personal_ho">Personal H/O</label>
-                    <textarea name="personal_ho" id="personal_ho" class="form-control">{{ $appointment->personal_ho }}</textarea>
-                    @error('personal_ho')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="past_ho">Past H/O</label>
-                    <textarea name="past_ho" id="past_ho" class="form-control">{{ $appointment->past_ho }}</textarea>
-                    @error('past_ho')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-            </div>
-            <div class="form-row">
-
-                <h4>Presenting Complaint</h4>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-3">
-                    <label for="chief_complaint">Chief Complaint</label>
-                    <textarea name="chief_complaint" id="chief_complaint" class="form-control">{{ $appointment->chief_complaint }}</textarea>
-                    @error('chief_complaint')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="past_history">Past History</label>
-                    <textarea name="past_history" id="past_history" class="form-control">{{ $appointment->past_history }}</textarea>
-                    @error('past_history')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="family_history">Family History</label>
-                    <textarea name="family_history" id="family_history" class="form-control">{{ $appointment->family_history }}</textarea>
-                    @error('family_history')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="vitals_general_examination">Vitals / General Examination</label>
-                    <textarea name="vitals_general_examination" id="vitals_general_examination" class="form-control">{{ $appointment->vitals_general_examination }}</textarea>
-                    @error('vitals_general_examination')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="personal_history">Personal History</label>
-                    <textarea name="personal_history" id="personal_history" class="form-control">{{ $appointment->personal_history }}</textarea>
-                    @error('personal_history')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="allergic_history">Allergic History</label>
-                    <textarea name="allergic_history" id="allergic_history" class="form-control">{{ $appointment->allergic_history }}</textarea>
-                    @error('allergic_history')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="obstetric_history">Obstetric History</label>
-                    <textarea name="obstetric_history" id="obstetric_history" class="form-control">{{ $appointment->obstetric_history }}</textarea>
-                    @error('obstetric_history')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="treatment">Treatment</label>
-                    <textarea name="treatment" id="treatment" class="form-control">{{ $appointment->treatment }}</textarea>
-                    @error('treatment')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-                <div class="form-group col-md-3">
-                    <label for="remarks">Remarks</label>
-                    <textarea name="remarks" id="remarks" class="form-control">{{ $appointment->remarks }}</textarea>
-                    @error('remarks')
-                    <div class="invalid-feedback">
-                        {{$message}}
-                    </div>
-                    @enderror
-                </div>
-                
-
-            </div>
-
-
-            <button type="submit" class="btn btn-primary">save</button>
-        </form>
-
-            </div>
         </div>
-          
     </div>
 </div>
 
 
-
+<script src="{{ asset('/js/edit-appointment.js') }}"></script>
 <!-- ajax for dynamic data -->
 <script>
 

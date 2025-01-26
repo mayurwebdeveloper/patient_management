@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Report;
 
 class AppointmentReport extends Model
 {
@@ -27,6 +28,7 @@ class AppointmentReport extends Model
         'report_id',
         'date',
         'status',
+        'report_pdf'
     ];
 
     /**
@@ -50,6 +52,6 @@ class AppointmentReport extends Model
      */
     public function report()
     {
-        return $this->belongsTo(App\Models\Report::class);
+        return $this->belongsTo(Report::class);
     }
 }

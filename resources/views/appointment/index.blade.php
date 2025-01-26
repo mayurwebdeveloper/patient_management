@@ -145,6 +145,9 @@
                                 Investigation
                             </button>
                             <a href="{{ route('treatment-sheet.show', $appointment->id) }}" class="btn btn-sm btn-info">Treatment Sheet</a>
+                            @if(Auth::user()->hasRole('Lab Technician'))
+                                <a href="{{ route('report-show', $appointment->id) }}" class="btn btn-sm btn-success">View Report</a>
+                            @endif
                         </td>
 
                       

@@ -94,12 +94,22 @@ Route::prefix('/admin')->middleware(['auth'])->group(function () {
     Route::post('/save-history-exam', [AppointmentController::class, 'saveHistoryExam'])->name('save-history-exam');
     Route::post('/save-complaint-exam', [AppointmentController::class, 'saveComplaintExam'])->name('save-complaint-exam');
 
+    Route::post('/update-patient-info/{id}', [AppointmentController::class, 'updatePatientInfo'])->name('update-patient-info');
+    Route::post('/update-general-exam/{id}', [AppointmentController::class, 'updateGeneralExam'])->name('update-general-exam');
+    Route::post('/update-systemic-exam/{id}', [AppointmentController::class, 'updateSystemicExam'])->name('update-systemic-exam');
+    Route::post('/update-history-exam/{id}', [AppointmentController::class, 'updateHistoryExam'])->name('update-history-exam');
+    Route::post('/update-complaint-exam/{id}', [AppointmentController::class, 'updateComplaintExam'])->name('update-complaint-exam');
+
     Route::put('/appointments/moupdate/{id}', [AppointmentController::class, 'moupdate'])->name('appointments.moupdate');
     Route::get('/appointments/update-admit-status/{appointment}', [AppointmentController::class, 'updateAdmitStatus']);
     Route::get('/treatment-sheet/{appointment}', [TreatmentSheetController::class, 'show'])->name('treatment-sheet.show')->middleware('permission:show treatment sheet');
     Route::post('/treatment-sheet/{appointment}', [TreatmentSheetController::class, 'store'])->name('treatment-sheet.store')->middleware('permission:show treatment sheet');
     Route::get('/treatment-sheet/{id}/pdf', [TreatmentSheetController::class, 'generatePDF'])->name('treatment-sheet.pdf')->middleware('download treatment sheet');
 
+
+    //reportshow
+    Route::get('/report-show/{id}',[AppointmentController::class, 'reportShow'])->name('report-show');
+    Route::post('/upload-report', [AppointmentController::class, 'uploadReportFile'])->name('upload.report.file');
     Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus'])->name('appointments.update-status');
     Route::get('/appointments/{id}/edit', [AppointmentController::class, 'edit'])->name('appointments.edit');
     
