@@ -28,6 +28,7 @@ class AppointmentReport extends Model
         'report_id',
         'date',
         'status',
+        'report_pdf'
     ];
 
     /**
